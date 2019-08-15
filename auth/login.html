@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="google-signin-client_id" content="1016615882873-4ri4h7650un1mn4kms8fc3k3g3k8ntkp.apps.googleusercontent.com">
+<title>Meeter Login</title>
+<link rel="stylesheet" type="text/css" href="auth.css" />
+<script src="https://api.google.com/js/api.js"></script>
+<script>
+	gapi.load('auth2', funciton() {
+		gapi.auth2.init();
+	});
+</script>
+</head>
+<body>
+	<div class="container">
+  <form action="/action_page.php">
+    <div class="row">
+      <h2 style="text-align:center">Login with Social Media or Manually</h2>
+      <div class="vl">
+        <span class="vl-innertext">or</span>
+      </div>
+
+      <div class="col">
+        <a href="#" class="fb btn">
+          <i class="fa fa-facebook fa-fw"></i> Login with Facebook
+        </a>
+        <a href="#" class="twitter btn">
+          <i class="fa fa-twitter fa-fw"></i> Login with Twitter
+        </a>
+        <br/><img src="../images/btn_google_signin_light_pressed_web.png" onclick=".signIn()"/><br/>
+        
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        
+        
+        <a href="http://google.com" class="google btn">
+          <i class="fa fa-google fa-fw"></i> Login with Google+
+        </a>
+      </div>
+
+      <div class="col">
+        <div class="hide-md-lg">
+          <p>Or sign in manually:</p>
+        </div>
+
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<div class="bottom-container">
+  <div class="row">
+    <div class="col">
+      <a href="#" style="color:white" class="btn">Sign up</a>
+    </div>
+    <div class="col">
+      <a href="#" style="color:white" class="btn">Forgot password?</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
