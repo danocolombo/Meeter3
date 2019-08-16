@@ -1,22 +1,23 @@
 <?php
-if(!isset($_SESSION)){
-	session_start();
+if (! isset($_SESSION)) {
+    session_start();
 }
-if(!isset($_SESSION["MTR-SESSION-ID"])){
-	header('Location: login.php');
-	exit();
-}	
+if (! isset($_SESSION["MTR-SESSION-ID"])) {
+    header('Location: login.php');
+    exit();
+}
 // WE THINK WE CAN OMIT THE NEXT LINE BECAUSE WE GET MEETING FROM MAPI
-//require 'meeter.php';
+// require 'meeter.php';
 
 require 'mtrAOS.php';
-//require 'includes/database.inc.php';
+// require 'includes/database.inc.php';
+//still need the meeting.inc.php file to parse out the "hosts"...
 require 'meeting.inc.php';
 // require 'peopleAOS.php';
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-//include 'database.php';
+// include 'database.php';
 // ---------------------------------------------------
 // mtgForm 2.0
 // ---------------------------------------------------
@@ -28,107 +29,105 @@ $client = $_SESSION["MTR-CLIENT"];
  */
 // $peepConfig = new pConfig();
 // $peepConfig->loadCommitTableWithAllPeople();
-//----------------------------------------------------------
-//the following command loads at temp table with peopel to use
-//------------------------------------------------------------
-//loadCommitTableWithAllPeople();
+// ----------------------------------------------------------
+// the following command loads at temp table with peopel to use
+// ------------------------------------------------------------
+// loadCommitTableWithAllPeople();
 //
 
 // ===================================================================
 // set up database connection to be used the remainder of the way
 // ===================================================================
-require_once('auth/database.php');
+require_once ('auth/database.php');
 //
-//$_gid = getGhostID();
-$cn = mysqli_connect($_SESSION["MTR-H"],
-	$_SESSION["MTR-U"],
-	$_SESSION["MTR-P"],
-	$_SESSION["MTR-CLIENT"]);
+// $_gid = getGhostID();
+$cn = mysqli_connect($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
 
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 // getGhostID
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-$result = mysqli_query($cn,"Call ccc.getGhostID") or die("Stored proc[getGhostID]: fail:" . mysqli_error());
-if(!isset($result)){
-	echo "NO GHOST ID, contact your support team";
-	exit;
+$result = mysqli_query($cn, "Call ccc.getGhostID") or die("Stored proc[getGhostID]: fail:" . mysqli_error());
+if (! isset($result)) {
+    echo "NO GHOST ID, contact your support team";
+    exit();
 }
-while($row = mysqli_fetch_array($result)){
-	$_gid =  $row[0];
+while ($row = mysqli_fetch_array($result)) {
+    $_gid = $row[0];
 }
-//need to tidy up before calling next proc
+// need to tidy up before calling next proc
 $result->close();
 $cn->next_result();
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 // getGhostLabel
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-$result = mysqli_query($cn,"Call ccc.getGhostLabel") or die("Stored proc[getGhostLabel]: fail:" . mysqli_error());
-if(!isset($result)){
-	echo "NO GHOST LABEL, contact your support team";
-	exit;
+$result = mysqli_query($cn, "Call ccc.getGhostLabel") or die("Stored proc[getGhostLabel]: fail:" . mysqli_error());
+if (! isset($result)) {
+    echo "NO GHOST LABEL, contact your support team";
+    exit();
 }
-while($row = mysqli_fetch_array($result)){
-	$_glabel =  $row[0];
+while ($row = mysqli_fetch_array($result)) {
+    $_glabel = $row[0];
 }
-//need to tidy up before calling next proc
+// need to tidy up before calling next proc
 $result->close();
 $cn->next_result();
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 // getNonPersonWorshipID
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-$result = mysqli_query($cn,"Call ccc.getNonPersonWorshipID") or die("Stored proc[getNonPersonWorhipID]: fail:" . mysqli_error());
-if(!isset($result)){
-	echo "NO NON-PERSON WORSHIP ID, contact your support team";
-	exit;
+$result = mysqli_query($cn, "Call ccc.getNonPersonWorshipID") or die("Stored proc[getNonPersonWorhipID]: fail:" . mysqli_error());
+if (! isset($result)) {
+    echo "NO NON-PERSON WORSHIP ID, contact your support team";
+    exit();
 }
-while($row = mysqli_fetch_array($result)){
-	$_npwid =  $row[0];
+while ($row = mysqli_fetch_array($result)) {
+    $_npwid = $row[0];
 }
-//need to tidy up before calling next proc
+// need to tidy up before calling next proc
 $result->close();
 $cn->next_result();
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 // getNonPersonWorshipLabel
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-$result = mysqli_query($cn,"Call ccc.getNonPersonWorshipLabel") or die("Stored proc[getNonPersonWorshipLabel]: fail:" . mysqli_error());
-if(!isset($result)){
-	echo "NO GHOST LABEL, contact your support team";
-	exit;
+$result = mysqli_query($cn, "Call ccc.getNonPersonWorshipLabel") or die("Stored proc[getNonPersonWorshipLabel]: fail:" . mysqli_error());
+if (! isset($result)) {
+    echo "NO GHOST LABEL, contact your support team";
+    exit();
 }
-while($row = mysqli_fetch_array($result)){
-	$_npwlabel =  $row[0];
+while ($row = mysqli_fetch_array($result)) {
+    $_npwlabel = $row[0];
 }
-//need to tidy up before calling next proc
+// need to tidy up before calling next proc
 $result->close();
 $cn->close();
 
 // get data
 // -----------------------------------------------------
-if(isset($_GET["ID"])){
-	$MID = $_GET["ID"];
-}else{
-	$MID = 0;
-}	
+if (isset($_GET["ID"])) {
+    $MID = $_GET["ID"];
+} else {
+    $MID = 0;
+}
 if ($MID > 0) {
     $edit = TRUE;
-    //--------------------------------------------------
-    //  get the meeting info from database
-    //--------------------------------------------------
+    // --------------------------------------------------
+    // get the meeting info from database
+    // --------------------------------------------------
     $client = $_SESSION["MTR-CLIENT"];
     $mtgUrl = "http://rogueintel.org/mapi/public/index.php/api/client/getMeeting/" . $client . "?mid=" . $MID;
 
     $data = file_get_contents($mtgUrl);
     $meetingArray = json_decode($data, true);
-    if (sizeof($meetingArray)< 1){
-	    echo "No meeting information found, contact your administrator";
-	    exit;
+    if (sizeof($meetingArray) < 1) {
+        echo "No meeting information found, contact your administrator";
+        exit();
     }
     $meeting = $meetingArray[0];
     $tFlag = true;
-    if ($tFlag == true){
+    if ($tFlag == true) {
         $mtgID = $MID;
         $mtgDate = $meeting["MtgDate"];
-        $mtgType = $meeting["MtgType"];;
+        $mtgType = $meeting["MtgType"];
+        ;
         $mtgTitle = $meeting["MtgTitle"];
         $mtgFac = $meeting["MtgFac"];
         $mtgAttendance = $meeting["MtgAttendance"];
@@ -148,12 +147,14 @@ if ($MID > 0) {
         $mtgChildrenFac = $meeting["ChildrenFac"];
         $mtgYouthFac = $meeting["YouthFac"];
         $mtgMealFac = $meeting["MealFac"];
-        $mtgCafeFac = $meeting["CafeFac"];;
+        $mtgCafeFac = $meeting["CafeFac"];
+        ;
         $mtgTransportationFac = $meeting["TransportationFac"];
         $mtgSetupFac = $meeting["SetupFac"];
         $mtgTearDownFac = $meeting["TearDownFac"];
         $mtgGreeter1Fac = $meeting["Greeter1Fac"];
-        $mtgGreeter2Fac = $meeting["Greeter2Fac"];;
+        $mtgGreeter2Fac = $meeting["Greeter2Fac"];
+        ;
         $mtgChips1Fac = $meeting["Chips1Fac"];
         $mtgChips2Fac = $meeting["Chips2Fac"];
         $mtgResourcesFac = $meeting["ResourcesFac"];
@@ -163,15 +164,27 @@ if ($MID > 0) {
         $mtgAnnouncementsFac = $meeting["AnnouncementsFac"];
         $mtgSecurityFac = $meeting["SecurityFac"];
     }
-    
-//     echo "\$mtgTitle: $mtgTitle<br/>";
-//     echo "\$mtgMenu: $mtgMenu<br/>";
-//     echo "\$mtgNotes: $mtgNotes<br/>";
-//     exit();
+
+    // echo "\$mtgTitle: $mtgTitle<br/>";
+    // echo "\$mtgMenu: $mtgMenu<br/>";
+    // echo "\$mtgNotes: $mtgNotes<br/>";
+    // exit();
 }
 // load the system configuration settings into object to use.
 $aosConfig->loadConfigFromDB();
 
+// =======================================
+// load the areas of service into temp table for use in dropdowns
+//=======================================
+$cn = mysqli_connect($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
+$proc = "Call " . $_SESSION["MTR-CLIENT"] . ".Load_Commit_Table";
+$result = mysqli_query($cn, $proc) or die("Stored proc[Load_Commit_Table]: fail:" . mysqli_error());
+$result = null;
+$cn->close();
+
+// need to tidy up before calling next proc
+$result->close();
+$cn->next_result();
 // #############################################
 // END OF PRE-CONDITIONING
 // #############################################
@@ -197,17 +210,18 @@ $aosConfig->loadConfigFromDB();
 <link rel="stylesheet" type="text/css"
 	media="only screen and (min-width:501px) and (max-width:800px)"
 	href="css/screen_layout_medium.css" />
-<link rel="stylesheet" type="text/css"
+<!-- <link rel="stylesheet" type="text/css"
 	media="only screen and (min-width:501px) and (max-width:800px)"
-	href="w3.css" />
-<link rel="stylesheet" type="text/css" href="meeter.css" />
+	href="w3.css" /> -->
+<!--  <link rel="stylesheet" type="text/css" href="meeter.css" />-->
 <!-- 
 <script src="js/jquery/jquery-3.3.1.js" type="text/javascript"></script>
 <script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
  -->
 <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="./js/meeter.js"></script>
@@ -365,8 +379,8 @@ $aosConfig->loadConfigFromDB();
 			    return vars;
 			}
         </script>
-		<script src="js/farinspace/jquery.imgpreload.min.js"></script>
-		<script>
+<script src="js/farinspace/jquery.imgpreload.min.js"></script>
+<script>
         	$(function() {
                 $( "#mtgDate" ).datepicker();
                 var meetingID = <?php echo json_encode($MID)?>;
@@ -386,34 +400,35 @@ $aosConfig->loadConfigFromDB();
 			<a class="logo" title="home" href="index.php"><span></span></a>
 		</header>
 		<div id="navBar">
-                    <script>
+			<script>
                         <?php
-                        if($_SESSION["MTR-ADMIN-FLAG"] == "1"){
+                        if ($_SESSION["MTR-ADMIN-FLAG"] == "1") {
                             echo "$( \"#navBar\" ).load( \"navbarA.php\" );";
-                        }else{
+                        } else {
                             echo "$( \"#navBar\" ).load( \"navbar.php\" );";
                         }
                         ?>
 
                      </script>
-                </div>
+		</div>
 		<article>
 			<?php
-            if ($edit) {
-                echo "<form id=\"mtgForm\" action=\"mtgAction.php?Action=Update&MID=$mtgID\" method=\"post\">";
-                echo "<h2 id=\"formTitle\">Meeting Entry</h2>";
-            } else {
-                echo "<form id=\"mtgForm\" action=\"mtgAction.php?Action=New\" method=\"post\">";
-                echo "<h2 id=\"formTitle\">New Meeting Entry</h2>";
-            }
-            ?>
+if ($edit) {
+    echo "<form id=\"mtgForm\" action=\"mtgAction.php?Action=Update&MID=$mtgID\" method=\"post\">";
+    echo "<h2 id=\"formTitle\">Meeting Entry</h2>";
+} else {
+    echo "<form id=\"mtgForm\" action=\"mtgAction.php?Action=New\" method=\"post\">";
+    echo "<h2 id=\"formTitle\">New Meeting Entry</h2>";
+}
+?>
 				<table id="formTable">
 				<tr>
 					<td colspan="2">
 						<table>
 							<tr>
-								<td>Meeting Date:&nbsp;<input type="text" id="mtgDate" name="mtgDate"></td>
-							</tr>	
+								<td>Meeting Date:&nbsp;<input type="text" id="mtgDate"
+									name="mtgDate"></td>
+							</tr>
 							<tr>
 								<td>
 									<fieldset>
@@ -512,7 +527,15 @@ $aosConfig->loadConfigFromDB();
                     // ================================
                     echo "<tr><td><div class=\"mtgLabels\" style=\"float:right\">" . $aosConfig->getDisplayString("worship") . ":</div></td>";
                     echo "<td><select id=\"mtgWorship\" name=\"mtgWorship\">";
-                    $option = getPeepsForService("worship");
+                    //$option = getPeepsForService("worship");
+                    $cn = mysqli_connect($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
+                    $proc = "Call " . $_SESSION["MTR-CLIENT"] . ".getVolunteersByCategory(\"worship:true\")";
+                    $row = mysqli_query($cn, $proc) or die("Stored proc[Load_Commit_Table]: fail:" . mysqli_error());
+
+                    while ($row = mysqli_fetch_array($result)) {
+                        $_npwid = $row[0];
+                    }
+                    
                     foreach ($option as $id => $name) {
                         if ($mtgWorship == $id) {
                             echo "<option value=\"$id\" SELECTED>$name</option>";
@@ -522,7 +545,7 @@ $aosConfig->loadConfigFromDB();
                     }
                     // add the ghost AND non-person to the bottom
                     if ($edit) {
-                        if ($mtgWorship == $_npwid){
+                        if ($mtgWorship == $_npwid) {
                             echo "<option value=\"$_npwid\" SELECTED>$_npwlabel</option>";
                         } else {
                             echo "<option value=\"$_npwid\">$_npwlabel</option>";
@@ -701,11 +724,11 @@ $aosConfig->loadConfigFromDB();
                     echo "<a href=\"#\" title=\"People on resource team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
                 } // this ends the if statement for RESOURCES
-                  
+
                 // echo "</td></tr>";
                 echo "</table>";
                 // END OF TABLE 1
-                
+
                 // BEGINNING of TABLE 2 (DINNER)
                 if ($aosConfig->getConfig("meal") == "true") {
                     // the configuration is to manage/track the meal
@@ -756,7 +779,7 @@ $aosConfig->loadConfigFromDB();
                     echo "</fieldset>";
                     echo "</td></tr></table>";
                 } // END OF TABLE 2 (DINNER)
-                  
+
                 // BEGINNING TABLE 3
                 echo "<table>";
                 echo "<tr>";
@@ -999,13 +1022,13 @@ $aosConfig->loadConfigFromDB();
                     echo "<a href=\"#\" title=\"People on Serenity Prayer team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
                 }
-                
+
                 echo "</table>";
-                
+
                 // BEGINNING of TABLE 4 (GENERATIONS)
                 if ($aosConfig->getConfig("youth") == "true" || $aosConfig->getConfig("children") == "true" || $aosConfig->getConfig("nursery") == "true") {
                     // if any of the generations is enabled, display the table
-                    
+
                     echo "<table><tr><td>";
                     echo "<fieldset><legend>Generations</legend>";
                     echo "<table>";
@@ -1185,7 +1208,7 @@ $aosConfig->loadConfigFromDB();
                     echo "<a href=\"#\" title=\"People on Tear-Down team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
                 }
-                
+
                 if ($aosConfig->getConfig("security") == "true") {
                     // ================================
                     // SECURITY IS TRUE = DISPLAY OPTION
@@ -1235,38 +1258,40 @@ $aosConfig->loadConfigFromDB();
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
-						<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<?php 
-						if($_SESSION["adminFlag"] == "1"){
-    						if($MID>0){
-    						    //display update button, otherwise insert
-    						    echo "<button style=\"font-family:tahoma; font-size:12pt; color:white; background:green; padding: 5px 15px 5px 15px; border-radius:10px;background-image: linear-gradient(to bottom right, #006600, #33cc33);\" type=\"button\" onclick=\"validateMtgForm()\">UPDATE</button>";
-    						}else{
-    						    echo "<button style=\"font-family:tahoma; font-size:12pt; color:white; background:green; padding: 5px 15px 5px 15px; border-radius:10px;background-image: linear-gradient(to bottom right, #006600, #33cc33);\" type=\"button\" onclick=\"validateMtgForm()\">INSERT</button>";
-    						}
-						}
-						?>
+					<td colspan="2"><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<?php
+    if ($_SESSION["adminFlag"] == "1") {
+        if ($MID > 0) {
+            // display update button, otherwise insert
+            echo "<button style=\"font-family:tahoma; font-size:12pt; color:white; background:green; padding: 5px 15px 5px 15px; border-radius:10px;background-image: linear-gradient(to bottom right, #006600, #33cc33);\" type=\"button\" onclick=\"validateMtgForm()\">UPDATE</button>";
+        } else {
+            echo "<button style=\"font-family:tahoma; font-size:12pt; color:white; background:green; padding: 5px 15px 5px 15px; border-radius:10px;background-image: linear-gradient(to bottom right, #006600, #33cc33);\" type=\"button\" onclick=\"validateMtgForm()\">INSERT</button>";
+        }
+    }
+    ?>
 						
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button style="font-family:tahoma; font-size:12pt; color:white; background:green; padding: 5px 15px 5px 15px; border-radius:10px;background-image: linear-gradient(to bottom right, #cc0000, #ff3300);" type="button" onclick="cancelMtgForm()">CANCEL</button>
-						<br/><br/>
-					</td>
+						<button
+							style="font-family: tahoma; font-size: 12pt; color: white; background: green; padding: 5px 15px 5px 15px; border-radius: 10px; background-image: linear-gradient(to bottom right, #cc0000, #ff3300);"
+							type="button" onclick="cancelMtgForm()">CANCEL</button> <br />
+					<br /></td>
 				</tr>
-				
+
 			</table>
 			<!-- ########################### -->
 			<!-- STARTING OPEN SHARE SECTION -->
 			<!-- ########################### -->
-			<?php if(($MID>0) && ($_SESSION["adminFlag"] == "1")){ 
-			 // don't show groups list if it is a new entry
-			     ?>
+			<?php
+
+if (($MID > 0) && ($_SESSION["adminFlag"] == "1")) {
+    // don't show groups list if it is a new entry
+    ?>
 				<fieldset>
 				<legend>Open Share Groups</legend>
-    			<div id="groupInformationArea"></div>
-    			</fieldset>
-    			<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-    			<script>
+				<div id="groupInformationArea"></div>
+			</fieldset>
+			<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+			<script>
     			$(document).ready(function(){
     				
     				var theUrl = 'http://recovery.help/meeter/api/json/groups/getGroupsForMtgForm.php?client=UAT&MID='+<?php echo $MID?>;
@@ -1325,7 +1350,7 @@ $aosConfig->loadConfigFromDB();
 			<!--  ENDING OPEN SHARE SECTION  -->
 			<!-- ########################### -->
 			</form>
-			
+
 		</article>
 		<div id="footerArea"></div>
 		<script>
