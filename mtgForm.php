@@ -134,7 +134,7 @@ if ($MID > 0) {
         $mtgWorship = $meeting["MtgWorship"];
         $mtgMenu = $meeting["Meal"];
         $mtgMealCnt = $meeting["MealCnt"];
-        $mtgNurseryCnt = $meeting["NurseyCnt"];
+        $mtgNurseryCnt = $meeting["NurseryCnt"];
         $mtgChildrenCnt = $meeting["ChildrenCnt"];
         $mtgYouthCnt = $meeting["YouthCnt"];
         $mtgNotes = $meeting["MtgNotes"];
@@ -182,9 +182,7 @@ $result = mysqli_query($cn, $proc) or die("Stored proc[Load_Commit_Table]: fail:
 $result = null;
 $cn->close();
 
-// need to tidy up before calling next proc
-$result->close();
-$cn->next_result();
+
 // #############################################
 // END OF PRE-CONDITIONING
 // #############################################
@@ -513,12 +511,12 @@ if ($edit) {
                 if ($aosConfig->getConfig("donations") == "true") {
                     echo "<tr>";
                     echo "<td><div class=\"mtgLabels\" style=\"float:right\">Donations:</div></td>";
-                    if (sizeof($mtgDonations) > 0) {
-                        echo "<td><input id=\"mtgDonations\" name=\"mtgDonations\" size=\"6\" type=\"text\" value=\"$mtgDonations\"/>";
-                    } else {
-                        echo "<td><input id=\"mtgDonations\"  name=\"mtgDonations\" size=\"6\" type=\"text\" placeholder=\"0\"/>";
+                    if(isset($mtgDonations)){
+                        $dvalue = $mtgDonations;
+                    }else {
+                        $dvalue = 0;
                     }
-                    echo "</td>";
+                    echo "<td><input id=\"mtgDonations\" name=\"mtgDonations\" size=\"6\" type=\"text\" value=\"" . $dvalue . "\"/></td>";
                 }
                 echo "</tr>";
                 if ($aosConfig->getConfig("worship") == "true") {
@@ -527,14 +525,9 @@ if ($edit) {
                     // ================================
                     echo "<tr><td><div class=\"mtgLabels\" style=\"float:right\">" . $aosConfig->getDisplayString("worship") . ":</div></td>";
                     echo "<td><select id=\"mtgWorship\" name=\"mtgWorship\">";
-                    //$option = getPeepsForService("worship");
-                    $cn = mysqli_connect($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
-                    $proc = "Call " . $_SESSION["MTR-CLIENT"] . ".getVolunteersByCategory(\"worship:true\")";
-                    $row = mysqli_query($cn, $proc) or die("Stored proc[Load_Commit_Table]: fail:" . mysqli_error());
-
-                    while ($row = mysqli_fetch_array($result)) {
-                        $_npwid = $row[0];
-                    }
+                    
+                    //call function in meeting.in.php to get the people for service.
+                    $option = getPeepsForService("worship");
                     
                     foreach ($option as $id => $name) {
                         if ($mtgWorship == $id) {
@@ -561,6 +554,9 @@ if ($edit) {
                     }
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
+                    echo "<tr><td colspan=2>";
+                    print_r($option);
+                    echo "</td></tr>";
                 }
                 if ($aosConfig->getConfig("av") == "true") {
                     // ================================
@@ -1248,7 +1244,7 @@ if ($edit) {
 						<fieldset>
 							<legend>Notes and Comments</legend>
                               	<?php
-                            if (sizeof($mtgNotes) > 0) {
+                            if (isset($mtgNotes) ) {
                                 echo "<textarea id=\"mtgNotes\" name=\"mtgNotes\" rows=\"5\" cols=\"80\">" . $mtgNotes . "</textarea>";
                             } else {
                                 echo "<textarea id=\"mtgNotes\" name=\"mtgNotes\"  rows=\"5\" cols=\"80\"></textarea>";
@@ -1260,7 +1256,7 @@ if ($edit) {
 				<tr>
 					<td colspan="2"><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<?php
-    if ($_SESSION["adminFlag"] == "1") {
+    if ($_SESSION["MTR-ADMIN-FLAG"] == "1") {
         if ($MID > 0) {
             // display update button, otherwise insert
             echo "<button style=\"font-family:tahoma; font-size:12pt; color:white; background:green; padding: 5px 15px 5px 15px; border-radius:10px;background-image: linear-gradient(to bottom right, #006600, #33cc33);\" type=\"button\" onclick=\"validateMtgForm()\">UPDATE</button>";
@@ -1283,7 +1279,7 @@ if ($edit) {
 			<!-- ########################### -->
 			<?php
 
-if (($MID > 0) && ($_SESSION["adminFlag"] == "1")) {
+if (($MID > 0) && ($_SESSION["MTR-ADMIN-FLAG"] == "1")) {
     // don't show groups list if it is a new entry
     ?>
 				<fieldset>
@@ -1303,11 +1299,11 @@ if (($MID > 0) && ($_SESSION["adminFlag"] == "1")) {
         				cache: false,
         				success: function(data) {
             				output += '<table border=1><tr>';
-            				<?php if($_SESSION["adminFlag"] == "1"){?>
+            				<?php if($_SESSION["MTR-ADMIN-FLAG"] == "1"){?>
                 				output += '<th></th>';
             				<?php }?>
             				output += '<th>Title</th><th>Facilitator</th><th>Co-Facilitator</th><th>Location</th><th>#</th>';
-            				<?php if($_SESSION["adminFlag"] == "1"){?>
+            				<?php if($_SESSION["MTR-ADMIN-FLAG"] == "1"){?>
                 				output += '<th></th>';
             				<?php }?>
             				output += '</tr>';
@@ -1315,7 +1311,7 @@ if (($MID > 0) && ($_SESSION["adminFlag"] == "1")) {
     //     							console.log(value.Title);
 //         							output += '<tr><td>'+value.Title+'</td></tr>';
 									output += '<tr>';
-									<?php if($_SESSION["adminFlag"] == "1"){?>
+									<?php if($_SESSION["MTR-ADMIN-FLAG"] == "1"){?>
 										output += '<td valign=\'center\' style=\'padding: 5px\'>';
 										var editLink = 'grpForm.php?GID='+value.ID+'&MID='+<?php echo $MID; ?>+'&Action=Edit';
 										output += '<a href=\''+editLink+'\'><img src=\'images/btnEdit.gif\' alt=\"(edit)\"></img></a></td>';
@@ -1325,7 +1321,7 @@ if (($MID > 0) && ($_SESSION["adminFlag"] == "1")) {
 									output += '<td style=\'padding: 10px; text-align: center;\'>'+value.CoFirstName+'</td>';
 									output += '<td>'+value.Location+'</td>';
 									output += '<td align=\'center\' style=\'left-padding: 5px; right-padding: 5px;\'>'+value.Attendance+'</td>';
-									<?php if($_SESSION["adminFlag"] == "1"){?>
+									<?php if($_SESSION["MTR-ADMIN-FLAG"] == "1"){?>
     									editLink = 'mtgAction.php?Action=DeleteGroup&MID='+<?php echo $MID;?>+'&GID='+value.ID;
     									output += '<td width=15px; alight=\'right\'><a href=\''+editLink+'\'><img src=\'images/minusbutton.gif\' alt=\"(remove)\"></img></a></td>';
 									<?php }?>

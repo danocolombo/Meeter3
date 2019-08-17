@@ -238,25 +238,27 @@
         // going to query database for the category (service) passed in and load array
         mysqli_report(MYSQLI_REPORT_STRICT);
         
-        define('DB_HOST', 'localhost');
-        define('DB_USER', 'dcolombo_muat');
-        define('DB_PASSWORD', 'MR0mans1212!');
-        define('DB_NAME', 'dcolombo_muat');
-        $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $cn = mysqli_connect($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
+        $proc = "Call " . $_SESSION["MTR-CLIENT"] . ".getVolunteersByCategory(\"" . $service . ":true\")";
+        $result = mysqli_query($cn, $proc) or die("getVolunteersByCategory: fail:" . mysqli_error());
+
+        while ($row = mysqli_fetch_array($result)) {
+            $i = $row[0];
+            $n = $row[1] . " " . $row[2];
+            $peeps[$i] = $n;
+        }
         
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
-        }
-        $query = $connection->prepare("SELECT ID, FName, LName FROM Commits WHERE Category = ?");
-        $query->bind_param("s", $service);
-        $query->execute();
-        $query->bind_result($id, $fn, $ln);
-        while($query->fetch()){
-            $name = $fn . " " . $ln;
-            $peeps[$id] = $name;
-        }
-        $query->close();
+        
+        
+//         $query = $connection->prepare("SELECT ID, FName, LName FROM Commits WHERE Category = ?");
+//         $query->bind_param("s", $service);
+//         $query->execute();
+//         $query->bind_result($id, $fn, $ln);
+//         while($query->fetch()){
+//             $name = $fn . " " . $ln;
+//             $peeps[$id] = $name;
+//         }
+        $cn->close();
         return $peeps;
     }
 
