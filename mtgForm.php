@@ -554,9 +554,9 @@ if ($edit) {
                     }
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
-                    echo "<tr><td colspan=2>";
-                    print_r($option);
-                    echo "</td></tr>";
+//                     echo "<tr><td colspan=2>";
+//                     print_r($option);
+//                     echo "</td></tr>";
                 }
                 if ($aosConfig->getConfig("av") == "true") {
                     // ================================
