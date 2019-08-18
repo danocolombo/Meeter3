@@ -1,4 +1,11 @@
 <?php
+if (! isset($_SESSION)) {
+    session_start();
+}
+if (! isset($_SESSION["MTR-SESSION-ID"])) {
+    header('Location: login.php');
+    exit();
+}
 /*******************************************
  * meeter.php
  * 

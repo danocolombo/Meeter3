@@ -1,6 +1,13 @@
 <?php 
-require_once('authenticate.php'); /* this is used for security purposes */
-require 'meeter.php';
+if (! isset($_SESSION)) {
+    session_start();
+}
+if (! isset($_SESSION["MTR-SESSION-ID"])) {
+    header('Location: login.php');
+    exit();
+}
+//require_once('authenticate.php'); /* this is used for security purposes */
+require 'meeter.php';  //this is used for the config of meeter app for client
 require 'mtrAOS.php';
 // need to get the configuration settings from the database
 $mtrConfig->getLatestConfig();

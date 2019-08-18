@@ -120,22 +120,26 @@ $client = $_SESSION["MTR-CLIENT"];
 //     $table->setHeaderContents(0,3, "Title");
 //     $table->setHeaderContents(0,4, "Leader");
 //     $table->setHeaderContents(0,5, "Worship");
-    echo "<div>";
-    echo "<table border='1' id='trainingdata' align='center'><tr><td>Date</td><td>#</td><td>Type</td><td>Title</td><td>Leader</td><td>Worship</td></tr>";
     
-    //cycle through the array to produce the table data
+    if(isset($mtg)){
+        //if we have any meetings, display them
+        echo "<div>";
+        echo "<table border='1' id='trainingdata' align='center'><tr><td>Date</td><td>#</td><td>Type</td><td>Title</td><td>Leader</td><td>Worship</td></tr>";
     
-    for($rownum = 0; $rownum < count($mtg); $rownum++){
-        echo "<tr>";
-        for($colnum = 0; $colnum < 6; $colnum++){
-            echo "<td>" . $mtg[$rownum][$colnum] . "</td>";
-//             $table->setCellContents($rownum+1, $colnum, $mtg[$rownum][$colnum]);
+        //cycle through the array to produce the table data
+    
+        for($rownum = 0; $rownum < count($mtg); $rownum++){
+            echo "<tr>";
+            for($colnum = 0; $colnum < 6; $colnum++){
+                echo "<td>" . $mtg[$rownum][$colnum] . "</td>";
+    //             $table->setCellContents($rownum+1, $colnum, $mtg[$rownum][$colnum]);
+            }
+            echo "</tr>";
         }
-        echo "</tr>";
+    
+    //     $table->altRowAttributes(1,null, array("class"=>"alt"));
+        echo "</table>";
     }
-//     $table->altRowAttributes(1,null, array("class"=>"alt"));
-    echo "</table>";
-
     //output the data
     echo "<div>";
 //     echo $table->toHTML();

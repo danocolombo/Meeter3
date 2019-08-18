@@ -1,9 +1,17 @@
 <?php
+if (! isset($_SESSION)) {
+    session_start();
+}
+if (! isset($_SESSION["MTR-SESSION-ID"])) {
+    header('Location: login.php');
+    exit();
+}
 include 'mtgRedirects.php';
-require 'meeter.php';
-require 'includes/database.inc.php';
-require 'includes/meeting.inc.php';
-include 'auth/database.php';
+include 'meeting.php';
+// require 'meeter.php';
+// require 'includes/database.inc.php';
+//require 'includes/meeting.inc.php';
+// include 'auth/database.php';
 /*
  * mtgAction.php
  */
@@ -254,6 +262,17 @@ function updateMeetingInDB(){
     /*
      * this routine updates an existing record in the database
      */
+    
+    //load all the form data into a class object
+    $mDate = $_POST["mtgDate"];
+    $mType = $_POST["rdoMtgType"];
+    $mTitle = $_POST["mtgTitle"];
+    $tm = new meeting($mDate, $mType, $mTitle);
+    $tm->setMtgHost($_POST["mtgCoordinator"]);
+    echo "we created object. <br/>";
+    echo "Host:" . $tm->getMtgHost;
+    exit();
+    
     /* need the following $link command to use the escape_string function */
     /*
      * this routine addes the form information to the database
