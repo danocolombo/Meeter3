@@ -1,10 +1,15 @@
 <?php
-require_once('authenticate.php'); /* used for security purposes */
-include 'auth/database.php';
+if(!isset($_SESSION)){
+    session_start();
+}
+if(!isset($_SESSION["MTR-SESSION-ID"])){
+    header('Location: login.php');
+    exit();
+}
 include 'meeter.php';
 include 'peopleAOS.php';
 include 'mtrAOS.php';
-include 'includes/people.inc.php';
+include 'people.inc.php';
 
 global $person;
 $person = new MeeterPeep();     //meeter.php

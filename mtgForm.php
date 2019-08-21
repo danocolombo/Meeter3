@@ -553,9 +553,9 @@ if ($edit) {
                         echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     }
                     echo "</select>";
-                    echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
-                    echo "<tr><td colspan=2>";
-                    print_r($option);
+//                     echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
+//                     echo "<tr><td colspan=2>";
+//                     print_r($option);
                     echo "</td></tr>";
                 }
                 if ($aosConfig->getConfig("av") == "true") {
@@ -1042,7 +1042,7 @@ if ($edit) {
                         echo "</td>";
                         if ($aosConfig->getConfig("nurseryFac") == "true") {
                             echo "<td>" . $aosConfig->getDisplayString("nurseryFac") . "</td><td><select id=\"mtgNurseryFac\" name=\"mtgNurseryFac\">";
-                            $option = getPeepsForService("nurseryFac");
+                            $option = getPeepsForService("nursery");
                             foreach ($option as $id => $name) {
                                 if ($mtgNurseryFac == $id) {
                                     echo "<option value=\"$id\" SELECTED>$name</option>";
@@ -1078,7 +1078,7 @@ if ($edit) {
                         echo "</td>";
                         if ($aosConfig->getConfig("childrenFac") == "true") {
                             echo "<td>" . $aosConfig->getDisplayString("childrenFac") . "</td><td><select id=\"mtgChildrenFac\" name=\"mtgChildrenFac\">";
-                            $option = getPeepsForService("childrenFac");
+                            $option = getPeepsForService("children");
                             foreach ($option as $id => $name) {
                                 if ($mtgChildrenFac == $id) {
                                     echo "<option value=\"$id\" SELECTED>$name</option>";
@@ -1114,7 +1114,7 @@ if ($edit) {
                         echo "</td>";
                         if ($aosConfig->getConfig("youthFac") == "true") {
                             echo "<td>" . $aosConfig->getDisplayString("youthFac") . "</td><td><select id=\"mtgYouthFac\" name=\"mtgYouthFac\">";
-                            $option = getPeepsForService("youthFac");
+                            $option = getPeepsForService("youth");
                             foreach ($option as $id => $name) {
                                 if ($mtgYouthFac == $id) {
                                     echo "<option value=\"$id\" SELECTED>$name</option>";

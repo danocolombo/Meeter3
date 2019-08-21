@@ -267,10 +267,41 @@ function updateMeetingInDB(){
     $mDate = $_POST["mtgDate"];
     $mType = $_POST["rdoMtgType"];
     $mTitle = $_POST["mtgTitle"];
+    // create object
     $tm = new meeting($mDate, $mType, $mTitle);
     $tm->setMtgHost($_POST["mtgCoordinator"]);
-    echo "we created object. <br/>";
-    echo "Host:" . $tm->getMtgHost;
+    $tm->setDonations($_POST["mtgDonations"]);
+    $tm->setWorshipFac($_POST["mtgWorship"]);
+    $tm->setAudioVisualFac($_POST["mtgAV"]);
+    $tm->setSetupFac($_POST["mtgSetup"]);
+    $tm->setTransportationFac($_POST["mtgTransportation"]);
+    $tm->setGreeter1Fac($_POST["mtgGreeter1"]);
+    $tm->setGreeter2Fac($_POST["mtgGreeter2"]);
+    $tm->setResourcesFac($_POST["mtgResources"]);
+    $tm->setMenu($_POST["mtgMenu"]);
+    $tm->setMealCnt($_POST["mtgMealCnt"]);
+    $tm->setMealFac($_POST["mtgMealFac"]);
+    $tm->setReader1Fac($_POST["mtgReader1"]);
+    $tm->setReader2Fac($_POST["mtgReader2"]);
+    $tm->setAnnouncementsFac($_POST["mtgAnnouncements"]);
+    $tm->setTeachingFac($_POST["mtgTeaching"]);
+    $tm->setChips1Fac($_POST["mtgChips1"]);
+    $tm->setChips2Fac($_POST["mtgChips2"]);
+    $tm->setNewcomers1Fac($_POST["mtgNewcomers1"]);
+    $tm->setNewcomers2Fac($_POST["mtgNewcomers2"]);
+    $tm->setSerenityFac($_POST["mtgSerenity"]);
+    $tm->setNurseryCnt($_POST["mtgNursery"]);
+    $tm->setNurseryFac($_POST["mtgNurseryFac"]);
+    $tm->setChildrenCnt($_POST["mtgChildren"]);
+    $tm->setChildrenFac($_POST["mtgChildrenFac"]);
+    $tm->setYouthCnt($_POST["mtgYouth"]);
+    $tm->setYouthFac($_POST["mtgYouthFac"]);
+    $tm->setCafeFac($_POST["mtgCafe"]);
+    $tm->setTearDownFac($_POST["mtgTearDown"]);
+    $tm->setSecurityFac($_POST["mtgSecurity"]);
+    $tm->setNotes($_POST["mtgNotes"]);
+
+    print_r($tm);
     exit();
     
     /* need the following $link command to use the escape_string function */
