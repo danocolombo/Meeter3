@@ -553,17 +553,10 @@ if ($edit) {
                         echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     }
                     echo "</select>";
-<<<<<<< HEAD
 //                     echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
 //                     echo "<tr><td colspan=2>";
 //                     print_r($option);
                     echo "</td></tr>";
-=======
-                    echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
-//                     echo "<tr><td colspan=2>";
-//                     print_r($option);
-//                     echo "</td></tr>";
->>>>>>> branch 'master' of https://github.com/danocolombo/Meeter3.git
                 }
                 if ($aosConfig->getConfig("av") == "true") {
                     // ================================
