@@ -6,6 +6,7 @@ if (! isset($_SESSION["MTR-SESSION-ID"])) {
     header('Location: login.php');
     exit();
 }
+include './vendor/autoload.php';
 include 'mtgRedirects.php';
 include 'meeting.php';
 // require 'meeter.php';
@@ -302,6 +303,7 @@ function updateMeetingInDB(){
     $tm->setNotes($_POST["mtgNotes"]);
 
     print_r($tm);
+    echo "HOW ABOUT THAT!!!";
     exit();
     
     /* need the following $link command to use the escape_string function */
