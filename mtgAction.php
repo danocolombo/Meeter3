@@ -304,6 +304,24 @@ function updateMeetingInDB(){
 
     print_r($tm);
     echo "HOW ABOUT THAT!!!";
+    /* ---------------------------------------------------------------------
+     * ---------------------------------------------------------------------
+     *   create AWS S3 object
+     * ---------------------------------------------------------------------
+     * ---------------------------------------------------------------------
+     */
+    $sdk = new Aws\Sdk([
+        'profile' => 'default',
+        'region' => 'us-east-1',
+        'version' => 'latest',
+        'DynamoDb' => [
+            'region' => 'us-east-1'
+        ]
+    ]);
+    $ddb_client = $sdk->createDynamoDb();
+    
+    
+    
     exit();
     
     /* need the following $link command to use the escape_string function */
