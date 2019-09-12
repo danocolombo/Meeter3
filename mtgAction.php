@@ -7,6 +7,10 @@ if (! isset($_SESSION["MTR-SESSION-ID"])) {
     exit();
 }
 include './vendor/autoload.php';
+require 'vendor/autoload.php';
+date_default_timezone_set('UTC');
+use Aws\DynamoDb\Exception\DynamoDbException;
+
 include 'mtgRedirects.php';
 include 'meeting.php';
 // require 'meeter.php';
@@ -38,26 +42,26 @@ switch ($Action){
 }
 
 function addMeetingToDB(){
-    /* 
+    /*
      * this routine addes the form information to the database
      */
     /* need the following $link command to use the escape_string function */
-
+    
     //since the add sql statement might be quite large dependind on the application
     // configuration, we will do it in parts.
     //-----------------------------------------------------------------------------------------------------
     // start with required fields, we know we check for mtgDate, mtgType and mtgTitle
     //-----------------------------------------------------------------------------------------------------
     
-//     $link = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD)
-//     OR die(mysql_error());
+    //     $link = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD)
+    //     OR die(mysql_error());
     
     //we are going to check our values:
-
+    
     $mtgDate = $_POST['mtgDate'];
     $mtgType = $_POST['rdoMtgType'];
     $mtgTitle = $_POST['mtgTitle'];
-
+    
     $mtgFac = $_POST['mtgCoordinator'];
     $mtgAttendance = $_POST['mtgAttendance'];
     $mtgDonations = $_POST['mtgDonations'];
@@ -66,7 +70,7 @@ function addMeetingToDB(){
     $mtgSetupFac = $_POST['mtgSetup'];
     $mtgTransportationFac = $_POST['mtgTransportation'];
     $mtgGreeter1Fac = $_POST['mtgGreeter1'];
-    $mtgGreeter2Fac = $_POST['mtgGreeter2'];    
+    $mtgGreeter2Fac = $_POST['mtgGreeter2'];
     $mtgResourcesFac = $_POST['mtgResources'];
     
     $mtgMenu = $_POST['mtgMenu'];
@@ -96,44 +100,44 @@ function addMeetingToDB(){
     
     $mtgNotes = $_POST['mtgNotes'];
     
-//         echo "\$mtgDate: " . $mtgDate . "<br/>";
-//         echo "\$mtgType: $mtgType<br/>";
-//         echo "\$mtgTitle: $mtgTitle<br/>";
-//         echo "\$mtgFac: $mtgFac<br/>";
-//         echo "\$mtgAttendance: $mtgAttendance<br/>";
-//         echo "\$mtgDonations: $mtgDonations<br/>";
-//         echo "\$mtgWorshipFac: $mtgWorshipFac<br/>";
-//         echo "\$mtgAudioVisualFac: $mtgAudioVisualFac<br/>";
-//         echo "\$mtgSetupFac: $mtgSetupFac<br/>";
-//         echo "\$mtgTransportationFac: $mtgTransportationFac<br/>";
-//         echo "\$mtgGreeter1Fac: $mtgGreeter1Fac<br/>";
-//         echo "\$mtgGreeter2Fac: $mtgGreeter2Fac<br/>";
-//         echo "\$mtgResourcesFac: $mtgResourcesFac<br/>";
-//         echo "\$mtgMenu: $mtgMenu<br/>";
-//         echo "\$mtgMealCnt: $mtgMealCnt<br/>";
-//         echo "\$mtgMealFac: $mtgMealFac<br/>";
-        
-//         echo "\$mtgReader1Fac: $mtgReader1Fac<br/>";
-//         echo "\$mtgReader2Fac: $mtgReader2Fac<br/>";
-//         echo "\$mtgAnnouncementsFac: $mtgAnnouncementsFac<br/>";
-//         echo "\$mtgTeachingFac: $mtgTeachingFac<br/>";
-        
-//         echo "\$mtgChips1Fac: $mtgChips1Fac<br/>";
-//         echo "\$mtgChips2Fac: $mtgChips2Fac<br/>";
-//         echo "\$mtgNewcomers1Fac: $mtgNewcomers1Fac<br/>";
-//         echo "\$mtgNewcomers2Fac: $mtgNewcomers2Fac<br/>";
-//         echo "\$mtgSerenityFac: $mtgSerenityFac<br/>";
-//         echo "\$mtgNurseryCnt: $mtgNurseryCnt<br/>";
-//         echo "\$mtgNurseryFac: $mtgNurseryFac<br/>";
-//         echo "\$mtgChildrenCnt: $mtgChildrenCnt<br/>";
-//         echo "\$mtgChildrenFac: $mtgChildrenFac<br/>";
-//         echo "\$mtgYouthCnt: $mtgYouthCnt<br/>";
-//         echo "\$mtgYouthFac: $mtgYouthFac<br/>";
-//         echo "\$mtgCafeFac: $mtgCafeFac<br/>";
-//         echo "\$mtgTearDownFac: $mtgTearDownFac<br/>";
-//         echo "\$mtgSecurityFac: $mtgSecurityFac<br/>";
-//         echo "\$mtgNotes: $mtgNotes<br/>";
-//         exit();
+    //         echo "\$mtgDate: " . $mtgDate . "<br/>";
+    //         echo "\$mtgType: $mtgType<br/>";
+    //         echo "\$mtgTitle: $mtgTitle<br/>";
+    //         echo "\$mtgFac: $mtgFac<br/>";
+    //         echo "\$mtgAttendance: $mtgAttendance<br/>";
+    //         echo "\$mtgDonations: $mtgDonations<br/>";
+    //         echo "\$mtgWorshipFac: $mtgWorshipFac<br/>";
+    //         echo "\$mtgAudioVisualFac: $mtgAudioVisualFac<br/>";
+    //         echo "\$mtgSetupFac: $mtgSetupFac<br/>";
+    //         echo "\$mtgTransportationFac: $mtgTransportationFac<br/>";
+    //         echo "\$mtgGreeter1Fac: $mtgGreeter1Fac<br/>";
+    //         echo "\$mtgGreeter2Fac: $mtgGreeter2Fac<br/>";
+    //         echo "\$mtgResourcesFac: $mtgResourcesFac<br/>";
+    //         echo "\$mtgMenu: $mtgMenu<br/>";
+    //         echo "\$mtgMealCnt: $mtgMealCnt<br/>";
+    //         echo "\$mtgMealFac: $mtgMealFac<br/>";
+    
+    //         echo "\$mtgReader1Fac: $mtgReader1Fac<br/>";
+    //         echo "\$mtgReader2Fac: $mtgReader2Fac<br/>";
+    //         echo "\$mtgAnnouncementsFac: $mtgAnnouncementsFac<br/>";
+    //         echo "\$mtgTeachingFac: $mtgTeachingFac<br/>";
+    
+    //         echo "\$mtgChips1Fac: $mtgChips1Fac<br/>";
+    //         echo "\$mtgChips2Fac: $mtgChips2Fac<br/>";
+    //         echo "\$mtgNewcomers1Fac: $mtgNewcomers1Fac<br/>";
+    //         echo "\$mtgNewcomers2Fac: $mtgNewcomers2Fac<br/>";
+    //         echo "\$mtgSerenityFac: $mtgSerenityFac<br/>";
+    //         echo "\$mtgNurseryCnt: $mtgNurseryCnt<br/>";
+    //         echo "\$mtgNurseryFac: $mtgNurseryFac<br/>";
+    //         echo "\$mtgChildrenCnt: $mtgChildrenCnt<br/>";
+    //         echo "\$mtgChildrenFac: $mtgChildrenFac<br/>";
+    //         echo "\$mtgYouthCnt: $mtgYouthCnt<br/>";
+    //         echo "\$mtgYouthFac: $mtgYouthFac<br/>";
+    //         echo "\$mtgCafeFac: $mtgCafeFac<br/>";
+    //         echo "\$mtgTearDownFac: $mtgTearDownFac<br/>";
+    //         echo "\$mtgSecurityFac: $mtgSecurityFac<br/>";
+    //         echo "\$mtgNotes: $mtgNotes<br/>";
+    //         exit();
     
     
     
@@ -165,8 +169,8 @@ function addMeetingToDB(){
     // no record found, proceed to add the entry
     //--------------------------------------------------------------
     $stmt->close();
-
-//     $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    
+    //     $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     $stmt = $connection->prepare("INSERT INTO `meetings` ( `MtgDate`, `MtgType`, `MtgTitle`) VALUES ( ?, ?, ?)");
     $stmt->bind_param("sss", date("Y-m-d", strtotime($mtgDate)), $mtgType, $mtgTitle );
     $stmt->execute();
@@ -174,10 +178,10 @@ function addMeetingToDB(){
     //--------------------------------------------------------------
     // get the ID just created with the insert
     //--------------------------------------------------------------
-//     $stmt = $connection->prepare("Select ID FROM meetings WHERE MtgDate = ? AND MtgType = ? AND MtgTitle = ?");
-//     $stmt->bind_param("sss", $mtgDate, $mtgType, $mtgTitle);
-//     $stmt->execute();
-//     $stmt->bind_result($ID);
+    //     $stmt = $connection->prepare("Select ID FROM meetings WHERE MtgDate = ? AND MtgType = ? AND MtgTitle = ?");
+    //     $stmt->bind_param("sss", $mtgDate, $mtgType, $mtgTitle);
+    //     $stmt->execute();
+    //     $stmt->bind_result($ID);
     $sql = "SELECT ID FROM meetings WHERE MtgDate = '";
     $sql .= date("Y-m-d", strtotime($mtgDate)) . "' AND MtgType = '";
     $sql .= $mtgType . "' AND  MtgTitle = '";
@@ -187,10 +191,10 @@ function addMeetingToDB(){
     $mtgID = $returnedID;
     $result->close();
     //----------------------------------------------------------
-    //now add (update) in sections 
+    //now add (update) in sections
     //----------------------------------------------------------
-
-//     $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    
+    //     $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     $sql = "UPDATE meetings SET MtgFac = ?, MtgAttendance = ?, Donations = ?, MtgWorship = ?, AudioVisualFac = ?, ";
     $sql .= "SetupFac = ?, TransportationFac = ?, Greeter1Fac = ?, Greeter2Fac = ?, ResourcesFac = ? WHERE ID = ?";
     $stmt = $connection->prepare($sql);
@@ -255,9 +259,9 @@ function addMeetingToDB(){
     $stmt->execute();
     $stmt->close();
     $connection->close();
-      
+    
     destination(307, "meetings.php");
-
+    
 }
 function updateMeetingInDB(){
     /*
@@ -301,24 +305,59 @@ function updateMeetingInDB(){
     $tm->setTearDownFac($_POST["mtgTearDown"]);
     $tm->setSecurityFac($_POST["mtgSecurity"]);
     $tm->setNotes($_POST["mtgNotes"]);
-
+    
     print_r($tm);
-    echo "HOW ABOUT THAT!!!";
+    
     /* ---------------------------------------------------------------------
      * ---------------------------------------------------------------------
      *   create AWS S3 object
      * ---------------------------------------------------------------------
      * ---------------------------------------------------------------------
      */
+    //     $sdk = new Aws\Sdk([
+    //         'profile' => 'default',
+    //         'region' => 'us-east-1',
+    //         'version' => 'latest',
+    //         'DynamoDb' => [
+        //             'region' => 'us-east-1'
+        //         ]
+    //     ]);
+    //     $ddb_client = $sdk->createDynamoDb();
+    
+    echo "<br/><br/>lets do this...<br/>";
+    
+    
+    
     $sdk = new Aws\Sdk([
-        'profile' => 'default',
-        'region' => 'us-east-1',
-        'version' => 'latest',
-        'DynamoDb' => [
-            'region' => 'us-east-1'
+        
+        'region'   => 'us-east-1',
+        'version'  => 'latest',
+        'credentials' => [
+            'key' => 'AKIATJIGWGHMDOHCQVNY',
+            'secret' => '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',
         ]
     ]);
-    $ddb_client = $sdk->createDynamoDb();
+    
+    $dynamodb = $sdk->createDynamoDb();
+    
+    $tableName = 'mtr.user';
+    echo "# Adding user to table $tableName...\n";
+    
+    $response = $dynamodb->putItem([
+        'TableName' => $tableName,
+        'Item' => [
+            'ID' => ['N' => '5'],
+            'login' => ['S' => 'bryan'],
+            'password' => ['S' => 'admin'],
+            'firstName' => ['S' => 'Bryan'],
+            'lastName' => ['S' => 'Donaldson']
+        ],
+        'ReturnConsumedCapacity' => 'TOTAL'
+    ]);
+    
+    echo "Consumed capacity: " . $response ["ConsumedCapacity"] ["CapacityUnits"] . "\n";
+    
+    echo "<br/>DONE<br/>";
     
     
     
@@ -390,26 +429,26 @@ function updateMeetingInDB(){
     
     //DEBUG
     
-//     echo "\$mtgID: $mtgID<br/>";
-//     echo "\$mtgDate: " . $mtgDate . "<br/>";
-//     echo "\$mtgType: $mtgType<br/>";
-//     echo "\$mtgTitle: $mtgTitle<br/>";
-//     echo "Greeter1: $mtgGreeter1Fac<br/>";
-//     echo "Greeter2: $mtgGreeter2Fac<br/>";
-//     echo "Reader1: $mtgReader1Fac<br/>";
-//     echo "Reader2: $mtgReader2Fac<br/>";
-//     echo "Chip1: $mtgChips1Fac<br/>";
-//     echo "Chip2: $mtgChips2Fac<br/>";
-//     echo "Newcomer1: $mtgNewcomers1Fac<br/>";
-//     echo "Newcomer2: $mtgNewcomers2Fac<br/>";
-//     echo "Menu: >>$mtgMenu<<<br/>";
-//     exit();
+    //     echo "\$mtgID: $mtgID<br/>";
+    //     echo "\$mtgDate: " . $mtgDate . "<br/>";
+    //     echo "\$mtgType: $mtgType<br/>";
+    //     echo "\$mtgTitle: $mtgTitle<br/>";
+    //     echo "Greeter1: $mtgGreeter1Fac<br/>";
+    //     echo "Greeter2: $mtgGreeter2Fac<br/>";
+    //     echo "Reader1: $mtgReader1Fac<br/>";
+    //     echo "Reader2: $mtgReader2Fac<br/>";
+    //     echo "Chip1: $mtgChips1Fac<br/>";
+    //     echo "Chip2: $mtgChips2Fac<br/>";
+    //     echo "Newcomer1: $mtgNewcomers1Fac<br/>";
+    //     echo "Newcomer2: $mtgNewcomers2Fac<br/>";
+    //     echo "Menu: >>$mtgMenu<<<br/>";
+    //     exit();
     //----------------------------------------------------------
     //now add (update) in sections
     //----------------------------------------------------------
     $sql = "UPDATE meetings SET MtgDate = ?, MtgType = ?, MtgTitle = ? WHERE ID = ?";
-//     echo "\$sql: $sql";
-//     exit();
+    //     echo "\$sql: $sql";
+    //     exit();
     $stmt = $connection->prepare($sql);
     $stmt->bind_param("sssi",
         date("Y-m-d", strtotime($mtgDate)),
@@ -490,16 +529,16 @@ function updateMeetingInDB(){
     destination(307, $dest);
 }
 function updateMeetingInDB1(){
-    /* 
+    /*
      * this routine updates an existing record in the database
      */
     /* need the following $link command to use the escape_string function */
     include 'database.php';
     $link = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD)
-            OR die(mysql_error());
+    OR die(mysql_error());
     
     
-    $ID = $_GET['ID']; 
+    $ID = $_GET['ID'];
     $mDate = $_POST['mtgDate'];
     $mType = $_POST['mtgType'];
     $mTitle = $_POST['mtgTitle'];
@@ -526,7 +565,7 @@ function updateMeetingInDB1(){
     $sql = $sql . $mDonations . ", ";
     $sql = $sql . "MtgMeal = '";
     $sql = $sql . $mMeal . "', ";
-//     $sql = $sql . mysql_real_escape_string($mMeal) . "', ";
+    //     $sql = $sql . mysql_real_escape_string($mMeal) . "', ";
     $sql = $sql . "DinnerCnt = '" . $mDinnerCnt . "', ";
     $sql = $sql . "NurseryCnt = '" . $mNurseryCnt . "', ";
     $sql = $sql . "ChildrenCnt = '" . $mChildrenCnt . "', ";
@@ -540,9 +579,9 @@ function updateMeetingInDB1(){
     {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
     }
-
+    
     mysqli_query($con,$sql);
-
+    
     mysqli_close($con);
     $dest = "meetings.php";
     //testSQL($sql);
@@ -550,9 +589,9 @@ function updateMeetingInDB1(){
 }
 
 function deleteGroup(){
-/*==========================================================
-    this routine deletes the group from the ID passed in
-==========================================================*/
+    /*==========================================================
+     this routine deletes the group from the ID passed in
+     ==========================================================*/
     $id = $_GET['GID'];
     
     // need to ensure that we have a GID
@@ -565,28 +604,28 @@ function deleteGroup(){
         {
             echo "Failed to connect to MySQL: " . mysqli_connect_error();
         }
-
+        
         mysqli_query($con,$sql);
-
+        
         mysqli_close($con);
         $dest = "mtgForm.php?ID=" . $_GET['MID'];
         //testSQL($sql);
         destination(307, $dest);
-    
+        
         
     }
     
 }
 function PreLoadGroups($MID){
     /*======================================================================
-     * this function copies the groups from the previous meeting to the 
+     * this function copies the groups from the previous meeting to the
      * meeting ID passed in.
      ======================================================================*/
     $dbcon=mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-    if (mysqli_connect_errno()){    
+    if (mysqli_connect_errno()){
         die("Database connection failed: " .
-        mysqli_connect_error() .
-        " (" . mysqli_connect_error() . ")");
+            mysqli_connect_error() .
+            " (" . mysqli_connect_error() . ")");
     }
     /*#############################################
      * GET THE LAST MEETING ID TO GET GROUPS FROM
@@ -604,7 +643,7 @@ function PreLoadGroups($MID){
     }
     $grpIDs = mysqli_fetch_assoc($result);
     $lastMtgID = $grpIDs["MtgID"];
-    mysqli_free_result($result); 
+    mysqli_free_result($result);
     // echo "<br />lastMtgID=" . $lastMtgID . "<br/>";
     /*****************************************************
      * Now get the groups from that last meeting in array
@@ -646,7 +685,7 @@ function PreLoadGroups($MID){
         $Title[$grpCnt] = $groups["Title"];
         ++$grpCnt;
     }
-    mysqli_free_result($result); 
+    mysqli_free_result($result);
     $i = 0;
     while ($i < $grpCnt){
         /*****************************
@@ -663,11 +702,11 @@ function PreLoadGroups($MID){
         $query = "INSERT INTO groups (FacID, CoFacID, Gender, Title, Location, MtgID)
             Values({$FacID[$i]}, {$CoFacID[$i]}, {$Gender[$i]}, '{$Title[$i]}',
                 '{$Location[$i]}', {$MID})";
-               
-        //echo "query:" . $query . "<br/><hr />";        
+        
+        //echo "query:" . $query . "<br/><hr />";
         $result = mysqli_query($dbcon, $query);
         if (!$result){
-            die("Database query INSERT failed");    
+            die("Database query INSERT failed");
         }
         ++$i;
     }
@@ -678,19 +717,19 @@ function PreLoadGroups($MID){
 }
 
 function executeSQL($sql){
-    /* 
-     * this function executes the sql passed in 
+    /*
+     * this function executes the sql passed in
      */
     include 'database.php';
     $con=mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
     // Check connection
     if (mysqli_connect_errno($con))
     {
-      echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
     }
-
+    
     mysqli_query($con,$sql);
-
+    
     
     mysqli_close($con);
     
@@ -699,9 +738,9 @@ function executeSQL($sql){
 }
 
 function testSQL($sql){
-    /* 
-     * this function executes the sql passed in 
+    /*
+     * this function executes the sql passed in
      */
-   echo "SQL: " . $sql;
+    echo "SQL: " . $sql;
 }
 ?>
