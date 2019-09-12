@@ -310,26 +310,14 @@ function updateMeetingInDB(){
     
     /* ---------------------------------------------------------------------
      * ---------------------------------------------------------------------
-     *   create AWS S3 object
+     *   create AWS DynamoDB object and insert value
      * ---------------------------------------------------------------------
      * ---------------------------------------------------------------------
      */
-    //     $sdk = new Aws\Sdk([
-    //         'profile' => 'default',
-    //         'region' => 'us-east-1',
-    //         'version' => 'latest',
-    //         'DynamoDb' => [
-        //             'region' => 'us-east-1'
-        //         ]
-    //     ]);
-    //     $ddb_client = $sdk->createDynamoDb();
     
     echo "<br/><br/>lets do this...<br/>";
-    
-    
-    
-    $sdk = new Aws\Sdk([
-        
+
+    $sdk = new Aws\Sdk([        
         'region'   => 'us-east-1',
         'version'  => 'latest',
         'credentials' => [
@@ -346,11 +334,11 @@ function updateMeetingInDB(){
     $response = $dynamodb->putItem([
         'TableName' => $tableName,
         'Item' => [
-            'ID' => ['N' => '5'],
-            'login' => ['S' => 'bryan'],
+            'ID' => ['N' => '6'],
+            'login' => ['S' => 'bubba'],
             'password' => ['S' => 'admin'],
-            'firstName' => ['S' => 'Bryan'],
-            'lastName' => ['S' => 'Donaldson']
+            'firstName' => ['S' => 'Bubba'],
+            'lastName' => ['S' => 'Gordy']
         ],
         'ReturnConsumedCapacity' => 'TOTAL'
     ]);
