@@ -321,11 +321,10 @@ function updateMeetingInDB(){
         'region'   => 'us-east-1',
         'version'  => 'latest',
         'credentials' => [
-            'key' => 'AKIATJIGWGHMDOHCQVNY',
-            'secret' => '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',
+            'key' => $_SESSION["MTR-AWS-KEY"],
+            'secret' => $_SESSION["MTR-AWS-SECRET"],
         ]
     ]);
-    
     $dynamodb = $sdk->createDynamoDb();
     
     $tableName = 'mtr.user';
