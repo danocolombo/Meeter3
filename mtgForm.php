@@ -24,6 +24,7 @@ header("Pragma: no-cache");
 // mtgForm 2.0
 // ---------------------------------------------------
 $client = $_SESSION["MTR-CLIENT"];
+$
 /*
  * --------------------------------------------------------
  * load the system configuration and possible assignees
@@ -384,6 +385,7 @@ $cn->close();
         	$(function() {
                 $( "#mtgDate" ).datepicker();
                 var meetingID = <?php echo json_encode($MID)?>;
+                //if there is a date value, co
                 var meetingDate = <?php echo json_encode(date("m-d-Y", strtotime($mtgDate)));?>;
                 var daDate = new Date();
                 daDate = stringToDate(meetingDate,"mm-dd-yyyy","-");
