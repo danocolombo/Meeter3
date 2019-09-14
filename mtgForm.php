@@ -10,6 +10,8 @@ if (! isset($_SESSION["MTR-SESSION-ID"])) {
 // require 'meeter.php';
 
 require 'mtrAOS.php';
+// require 'meeter.php';  //this is used for the config of meeter app for client
+
 // require 'includes/database.inc.php';
 //still need the meeting.inc.php file to parse out the "hosts"...
 require 'meeting.inc.php';
@@ -32,7 +34,7 @@ $client = $_SESSION["MTR-CLIENT"];
 // ----------------------------------------------------------
 // the following command loads at temp table with peopel to use
 // ------------------------------------------------------------
-// loadCommitTableWithAllPeople();
+loadCommitTableWithAllPeople();
 //
 
 // ===================================================================

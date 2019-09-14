@@ -137,40 +137,36 @@ class mConfig{
         // this routine opens up the meeter system table and gets the AOS value, 
         // which is the confurationo of the current application.
         //===========================================================================
-        $systemAOS = "";     
-        if ( isset( $connection ) ) return;
+        $systemAOS = "";   
         
-        mysqli_report(MYSQLI_REPORT_STRICT);
+        //call the AWS API mapi
+        // https://282lcxarb7.execute-api.us-east-1.amazonaws.com/QA/aos/ccc
+        $client = $_SESSION["MTR-CLIENT"];
+        $aosUrl = $_SESSION["AWS-MAPI-URL"] . "/aos/" . $client;;
+        //first try....
+        $data = file_get_contents($aosUrl);
+        $aosArray = json_decode($data, true);
+//         echo "aosURL: " . $aosUrl . "<br/>";
+//         print_r($aosArray);
+//         echo "<br/>ResponseSize:" . sizeof($aosArray) . "<br/>";
         
-       // define('DB_HOST', 'localhost');
-       // define('DB_USER', 'dcolombo_muat');
-       // define('DB_PASSWORD', 'MR0mans1212!');
-       // define('DB_NAME', 'dcolombo_muat');
-       define('DB_HOST', $_SESSION["MTR-H"]);
-       define('DB_USER', $_SESSION["MTR-U"]);
-       define('DB_PASSWORD', $_SESSION["MTR-P"]);
-       define('DB_NAME', $_SESSION["MTR-N"]);
-
-        $mysqli = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-        $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-        
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
+        if(sizeof($aosArray)>1){
+            //try one more time.
+            $data = file_get_contents($aosUrl);
+            $aosArray = json_decode($data, true);
+//             echo "aosURL: " . $aosUrl . "<br/>";
+//             print_r($aosArray);
+//             echo "<br/>ResponseSize:" . sizeof($aosArray) . "<br/>";
         }
         
-        $sql = "SELECT Setting FROM Meeter WHERE Config = 'AOS'";
-        $result = $connection->query($sql);
-        
-        if ($result->num_rows > 0) {
-            // output data of each row
-            while($row = $result->fetch_assoc()) {
-                $systemAOS =  $row["Setting"];
-            }
-        } else {
-            echo "0 results";
+        if (sizeof($aosArray) != 1) {
+            echo "unexpected response from DB, contact your administrator";
+            exit();
         }
-        $connection->close();
+        $systemAOS0 = $aosArray[0];
+        $systemAOS = $systemAOS0['Setting'];
+        
+        
         unset($this->AOS);
         $this->AOS = array();
  

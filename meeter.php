@@ -13,6 +13,7 @@ if (! isset($_SESSION["MTR-SESSION-ID"])) {
  * this is a required file that is used
  * for system configuration
  *****************************************/
+require_once ('auth/database.php');
 define("NOBODY", "0");
 $CLIENT = $_SESSION["MTR-CLIENT"];
 class mFeature
@@ -536,45 +537,53 @@ class meeting
     //
     // which means that we need values in $mDate, $mType & $mTitle
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public $mtgID;
-    public $mtgDate;
-    public $mtgType;
-    public $mtgTitle;
+    public $cn = NULL;
+    public $mtgID = NULL;
+    public $mtgDate = NULL;
+    public $mtgType = NULL;
+    public $mtgTitle = NULL;
     // trackable properties
 
-    public $mtgFac;
-    public $mtgAttendance;
-    public $donations;
-    public $worshipFac;
-    public $audioVisualFac;
-    public $setupFac;
-    public $transportationFac;
-    public $greeter1Fac;
-    public $greeter2Fac;
-    public $resourcesFac;
-    public $menu;
-    public $mealCnt;
-    public $mealFac;
-    public $reader1Fac;
-    public $reader2Fac;
-    public $announcementsFac;
-    public $teachingFac;
-    public $chips1Fac;
-    public $chips2Fac;
-    public $serenityFac;
-    public $newcomers1Fac;
-    public $newcomers2Fac;
-    public $nurseryCnt;
-    public $nurseryFac;
-    public $childrenCnt;
-    public $childrenFac;
-    public $youthCnt;
-    public $youthFac;
-    public $cafeFac;
-    public $tearDownFac;
-    public $securityFac;
-    public $notes;
+    public $mtgFac = NULL;
+    public $mtgAttendance = NULL;
+    public $donations = NULL;
+    public $worshipFac = NULL;
+    public $audioVisualFac = NULL;
+    public $setupFac = NULL;
+    public $transportationFac = NULL;
+    public $greeter1Fac = NULL;
+    public $greeter2Fac = NULL;
+    public $resourcesFac = NULL;
+    public $menu = NULL;
+    public $mealCnt = NULL;
+    public $mealFac = NULL;
+    public $reader1Fac = NULL;
+    public $reader2Fac = NULL;
+    public $announcementsFac = NULL;
+    public $teachingFac = NULL;
+    public $chips1Fac = NULL;
+    public $chips2Fac = NULL;
+    public $serenityFac = NULL;
+    public $newcomers1Fac = NULL;
+    public $newcomers2Fac = NULL;
+    public $nurseryCnt = NULL;
+    public $nurseryFac = NULL;
+    public $childrenCnt = NULL;
+    public $childrenFac = null;
+    public $youthCnt = NULL;
+    public $youthFac = NULL;
+    public $cafeFac = NULL;
+    public $tearDownFac = NULL;
+    public $securityFac = NULL;
+    public $notes = NULL;
 
+    function __construct()
+    {
+        // this is where we can do additional configuratoin, put defaults are above
+    }
+    
+    
+    
     /**
      * @return mixed
      */
@@ -1151,68 +1160,70 @@ class meeting
         $this->notes = $notes;
     }
     
-    function __construct($mDate, $mType, $mTitle){
-        $this->setMtgDate($mDate);
-        $this->setMtgType($mType);
-        $this->setMtgTitle($mTitle);
-    }
+//     function __construct($mDate, $mType, $mTitle){
+//         $this->setMtgDate($mDate);
+//         $this->setMtgType($mType);
+//         $this->setMtgTitle($mTitle);
+//     }
     public function printMeeting()
     {
         echo "------------ PRINTING MEETING DEFINITION -------------------";
-        echo "$mtgDate: " . $mtgDate . nl2br("\n");
-        echo "$mtgType: " . $mtgType . nl2br("\n");
-        echo "$mtgTitle: " . $mtgTitle . nl2br("\n");
-        echo "$id: " . $id . nl2br("\n");
-        echo "$host: " . $host . nl2br("\n");
-        echo "$attendance: " . $attendance . nl2br("\n");
-        echo "$donationAmount: " . $donationAmount . nl2br("\n");
-        echo "$mealGuests: " . $mealGuests . nl2br("\n");
-        echo "$notes: " . $notes . nl2br("\n");
-        echo "$greeter1: " . $greeter1 . nl2br("\n");
-        echo "$greeter2: " . $greeter2 . nl2br("\n");
-        echo "$resources: " . $resources . nl2br("\n");
-        echo "$transportation: " . $transportation . nl2br("\n");
-        echo "$worship: " . $worship . nl2br("\n");
-        echo "$chips1: " . $chips1 . nl2br("\n");
-        echo "$chips2: " . $chips2 . nl2br("\n");
-        echo "$meal: " . $meal . nl2br("\n");
-        echo "$mealFac: " . $mealFac . nl2br("\n");
-        echo "$reader1: " . $reader1 . nl2br("\n");
-        echo "$reader2: " . $reader2 . nl2br("\n");
-        echo "$announcements: " . $announcements . nl2br("\n");
-        echo "$donations: " . $donations . nl2br("\n");
-        echo "$nursery: " . $nursery . nl2br("\n");
-        echo "$nurseryFac: " . $nurseryFac . nl2br("\n");
-        echo "$children: " . $children . nl2br("\n");
-        echo "$childrenFac: " . $childrenFac . nl2br("\n");
-        echo "$youth: " . $youth . nl2br("\n");
-        echo "$youthFac: " . $youthFac . nl2br("\n");
-        echo "$serenity: " . $serenity . nl2br("\n");
-        echo "$nurseryFac: " . $nurseryFac . nl2br("\n");
-        echo "$cafe: " . $cafe . nl2br("\n");
-        echo "$cafeFac: " . $cafeFac . nl2br("\n");
-        echo "$setup: " . $setup . nl2br("\n");
-        echo "$teardown: " . $teardown . nl2br("\n");
-        echo "$av: " . $av . nl2br("\n");
-        echo "$security: " . $security . nl2br("\n");
+        echo "mtgDate: " . $this->getmtgDate . nl2br("\n");
+        echo "mtgType: " . $this->mtgType . nl2br("\n");
+        echo "mtgTitle: " . $this->mtgTitle . nl2br("\n");
+        echo "id: " . $this->getMtgID() . nl2br("\n");
+        echo "host: " . $this->host . nl2br("\n");
+//         echo "$attendance: " . $attendance . nl2br("\n");
+//         echo "$donationAmount: " . $donationAmount . nl2br("\n");
+//         echo "$mealGuests: " . $mealGuests . nl2br("\n");
+//         echo "$notes: " . $notes . nl2br("\n");
+//         echo "$greeter1: " . $greeter1 . nl2br("\n");
+//         echo "$greeter2: " . $greeter2 . nl2br("\n");
+//         echo "$resources: " . $resources . nl2br("\n");
+//         echo "$transportation: " . $transportation . nl2br("\n");
+//         echo "$worship: " . $worship . nl2br("\n");
+//         echo "$chips1: " . $chips1 . nl2br("\n");
+//         echo "$chips2: " . $chips2 . nl2br("\n");
+//         echo "$meal: " . $meal . nl2br("\n");
+//         echo "$mealFac: " . $mealFac . nl2br("\n");
+//         echo "$reader1: " . $reader1 . nl2br("\n");
+//         echo "$reader2: " . $reader2 . nl2br("\n");
+//         echo "$announcements: " . $announcements . nl2br("\n");
+//         echo "$donations: " . $donations . nl2br("\n");
+//         echo "$nursery: " . $nursery . nl2br("\n");
+//         echo "$nurseryFac: " . $nurseryFac . nl2br("\n");
+//         echo "$children: " . $children . nl2br("\n");
+//         echo "$childrenFac: " . $childrenFac . nl2br("\n");
+//         echo "$youth: " . $youth . nl2br("\n");
+//         echo "$youthFac: " . $youthFac . nl2br("\n");
+//         echo "$serenity: " . $serenity . nl2br("\n");
+//         echo "$nurseryFac: " . $nurseryFac . nl2br("\n");
+//         echo "$cafe: " . $cafe . nl2br("\n");
+//         echo "$cafeFac: " . $cafeFac . nl2br("\n");
+//         echo "$setup: " . $setup . nl2br("\n");
+//         echo "$teardown: " . $teardown . nl2br("\n");
+//         echo "$av: " . $av . nl2br("\n");
+//         echo "$security: " . $security . nl2br("\n");
     }
 
     public function commitNew()
     {
         // this inserts Date/Type/Title into database and sets id
+        $cn = mysqli_connect($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
+ 
         try {
-            $stmt = $connection->prepare("INSERT INTO `meetings` ( MtgDate, MtgType, MtgTitle) VALUES ( ?, ?, ?)");
+            $stmt = $cn->prepare("INSERT INTO `meetings` ( MtgDate, MtgType, MtgTitle) VALUES ( ?, ?, ?)");
             $stmt->bind_param("sss", $this->mtgDate, $this->mtgType, $this->mtgTitle);
             $stmt->execute();
             
-            $this->id = $connection->insert_id;
+            $this->id = $cn->insert_id;
             
             $stmt->close();
         } catch (PDOException $e) {
             echo "Error: [meeter.php_commitNew()] " . $e->getMessage();
         }
         
-        $connection = null;
+        $cn = null;
     }
 
     public function getMeeting($MID){
@@ -1220,85 +1231,117 @@ class meeting
         // this function will load the class with
         // the MID passed in.
         //-----------------------------------------
-        if ( isset( $connection ) ) return;
-            
-        mysqli_report(MYSQLI_REPORT_STRICT);
-            
-        define('DB_HOST', 'localhost');
-        define('DB_USER', 'dcolombo_muat');
-        define('DB_PASSWORD', 'MR0mans1212!');
-        define('DB_NAME', 'dcolombo_muat');
-        $mysqli = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-        $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-            
-            
-        if (mysqli_connect_errno()) {
-            die(sprintf("[meeter.php] Connect failed: %s\n", mysqli_connect_error()));
+        $client = $_SESSION["MTR-CLIENT"];
+        $mtgUrl = "http://rogueintel.org/mapi/public/index.php/api/client/getMeeting/" . $client . "?mid=" . $MID;
+        $data = file_get_contents($mtgUrl);
+        $meetingArray = json_decode($data, true);
+        if (sizeof($meetingArray) < 1) {
+            //there is no meeting in the database with that number
+            echo "meeter.php: attempting to getMeeting with MID that is not in database. contact your administrator";
+            exit();
         }
-        $sql = "SELECT * FROM meetings WHERE ID = " . $MID;
+        $meeting = $meetingArray[0];
         
-        $mtg = array();
+        $this->setMtgID($MID);
+        $this->setMtgDate($meeting["MtgDate"]);
+        $this->setMtgType($meeting["MtgType"]);
+        $this->setMtgTitle($meeting["MtgTitle"]);
+        $this->setMtgFac($meeting["MtgFac"]);
+        $this->setMtgAttendance($meeting["MtgAttendance"]);
+        $this->setWorshipFac($meeting["MtgWorship"]);
+        $this->setMenu($meeting["Meal"]);
+        $this->setMealCnt($meeting["MealCnt"]);
+        $this->setNurseryCnt($meeting["NurseryCnt"]);
+        $this->setChildrenCnt($meeting["ChildrenCnt"]);
+        $this->setYouthCnt($meeting["YouthCnt"]);
+        $this->setNotes($meeting["MtgNotes"]);
+        $this->setDonations($meeting["Donations"]);
+        $this->setNewcomers1Fac($meeting["Newcomers1Fac"]);
+        $this->setNewcomers2Fac($meeting["Newcomers2Fac"]);
+        $this->setReader1Fac($meeting["Reader1Fac"]);
+        $this->setReader2Fac($meeting["Reader2Fac"]);
+        $this->setNurseryFac($meeting["NurseryFac"]);
+        $this->setChildrenFac($meeting["ChildrenFac"]);
+        $this->setYouthFac($meeting["YouthFac"]);
+        $this->setMealFac($meeting["MealFac"]);
+        $this->setCafeFac($meeting["CafeFac"]);
         
-        $result = $mysqli->query($sql);
+        $this->setTransportationFac($meeting["TransportationFac"]);
+        $this->setSetupFac($meeting["SetupFac"]);
+        $this->setTearDownFac($meeting["TearDownFac"]);
+        $this->setGreeter1Fac($meeting["Greeter1Fac"]);
+        $this->setGreeter2Fac($meeting["Greeter2Fac"]);
         
-        while ($row = $result->fetch_array(MYSQLI_ASSOC))
-        {
-            $mtg[] = array($row['ID'], $row['MtgDate'], $row['MtgType'],
-                $row['MtgTitle'], $row['MtgPresenter'], $row['MtgAttendance'],
-                $row['MtgWorship'], $row['MtgMeal'], $row['DinnerCnt'],
-                $row['NurseryCnt'], $row['ChildrenCnt'], $row['YouthCnt'],
-                $row['MtgNotes'], $row['Donations'],$row['Reader1'], $row['Reader2'],
-                $row['NurseryContact'],$row['ChildrenContact'], $row['YouthContact'],
-                $row['MealContact'],$row['CafeContact'], $row['TransportationContact'],
-                $row['SetupContact'],$row['TearDownContact'], $row['Greeter1'],
-                $row['Greeter2'],$row['Resources'], $row['Serenity'],$row['AudioVisual'],
-                $row['Announcements'], $row['SecurityContact']
+        $this->setChips1Fac($meeting["Chips1Fac"]);
+        $this->setChips2Fac($meeting["Chips2Fac"]);
+        $this->setResourcesFac($meeting["ResourcesFac"]);
+        $this->setTeachingFac($meeting["TeachingFac"]);
+        $this->setSerenityFac($meeting["SerenityFac"]);
+        $this->setAudioVisualFac($meeting["AudioVisualFac"]);
+        $this->setAnnouncementsFac($meeting["AnnouncementsFac"]);
+        $this->setSecurityFac($meeting["SecurityFac"]);
+        
+        
+//         $result = $mysqli->query($sql);
+        
+//         while ($row = $result->fetch_array(MYSQLI_ASSOC))
+//         {
+//             $mtg[] = array($row['ID'], $row['MtgDate'], $row['MtgType'],
+//                 $row['MtgTitle'], $row['MtgPresenter'], $row['MtgAttendance'],
+//                 $row['MtgWorship'], $row['MtgMeal'], $row['DinnerCnt'],
+//                 $row['NurseryCnt'], $row['ChildrenCnt'], $row['YouthCnt'],
+//                 $row['MtgNotes'], $row['Donations'],$row['Reader1'], $row['Reader2'],
+//                 $row['NurseryContact'],$row['ChildrenContact'], $row['YouthContact'],
+//                 $row['MealContact'],$row['CafeContact'], $row['TransportationContact'],
+//                 $row['SetupContact'],$row['TearDownContact'], $row['Greeter1'],
+//                 $row['Greeter2'],$row['Resources'], $row['Serenity'],$row['AudioVisual'],
+//                 $row['Announcements'], $row['SecurityContact']
                 
-            );
-        }
-        $this->setId($mtg[0][0]);
-	if(!isset($mtg[0][1])){
-		$mtg[0][1] = "2018-06-18";
-	}
-        $this->setMtgDate($mtg[0][1]);
-	if(!isset($mtg[0][2])){
-		$mtg[0][2] = "Testimony";
-	}
-	$this->setMtgType($mtg[0][2]);
-	if(!isset($mtg[0][3])){
-		$mtg[0][3] = "Dano Colombo";
-	}
-        $this->setMtgTitle($mtg[0][3]);
-        $this->setHost($mtg[0][4]);
-        $this->setAttendance($mtg[0][5]);
-        $this->setWorship($mtg[0][6]);
-        $this->setMeal($mtg[0][7]);
-        $this->setMealGuests($mtg[0][8]);
-        $this->setNursery($mtg[0][9]);
-        $this->setChildren($mtg[0][10]);
-        $this->setYouth($mtg[0][11]);
-        $this->setNotes($mtg[0][12]);
-        $this->setDonationAmount($mtg[0][13]);
-        $this->setReader1($mtg[0][14]);
-        $this->setReader2($mtg[0][15]);
-        $this->setNurseryFac($mtg[0][16]);
-        $this->setChildrenFac($mtg[0][17]);
-        $this->setYouthFac($mtg[0][18]);
-        $this->setMealFac($mtg[0][19]);
-        $this->setCafeFac($mtg[0][20]);
-        $this->setTransportation($mtg[0][21]);
-        $this->setSetup($mtg[0][22]);
-        $this->setTeardown($mtg[0][23]);
-        $this->setGreeter1($mtg[0][24]);
-        $this->setGreeter2($mtg[0][25]);
-        $this->setResources($mtg[0][26]);
-        $this->setSerenity($mtg[0][27]);
-        $this->setAv($mtg[0][28]);
-        $this->setAnnouncements($mtg[0][29]);
-        $this->setSecurity($mtg[0][30]);
+//             );
+//         }
+//         $this->setId($mtg[0][0]);
+// 	if(!isset($mtg[0][1])){
+// 		$mtg[0][1] = "2018-06-18";
+// 	}
+//         $this->setMtgDate($mtg[0][1]);
+// 	if(!isset($mtg[0][2])){
+// 		$mtg[0][2] = "Testimony";
+// 	}
+// 	$this->setMtgType($mtg[0][2]);
+// 	if(!isset($mtg[0][3])){
+// 		$mtg[0][3] = "Dano Colombo";
+// 	}
+//         $this->setMtgTitle($mtg[0][3]);
+//         $this->setHost($mtg[0][4]);
+//         $this->setAttendance($mtg[0][5]);
+//         $this->setWorship($mtg[0][6]);
+//         $this->setMeal($mtg[0][7]);
+//         $this->setMealGuests($mtg[0][8]);
+//         $this->setNursery($mtg[0][9]);
+//         $this->setChildren($mtg[0][10]);
+//         $this->setYouth($mtg[0][11]);
+//         $this->setNotes($mtg[0][12]);
+//         $this->setDonationAmount($mtg[0][13]);
+//         $this->setReader1($mtg[0][14]);
+//         $this->setReader2($mtg[0][15]);
+//         $this->setNurseryFac($mtg[0][16]);
+//         $this->setChildrenFac($mtg[0][17]);
+//         $this->setYouthFac($mtg[0][18]);
+//         $this->setMealFac($mtg[0][19]);
+//         $this->setCafeFac($mtg[0][20]);
+//         $this->setTransportation($mtg[0][21]);
+//         $this->setSetup($mtg[0][22]);
+//         $this->setTeardown($mtg[0][23]);
+//         $this->setGreeter1($mtg[0][24]);
+//         $this->setGreeter2($mtg[0][25]);
+//         $this->setResources($mtg[0][26]);
+//         $this->setSerenity($mtg[0][27]);
+//         $this->setAv($mtg[0][28]);
+//         $this->setAnnouncements($mtg[0][29]);
+//         $this->setSecurity($mtg[0][30]);
     }
 }
-$theMeeting = new meeting($this->getMtgDate, $this->getMtgType, $this->getMtgTitle);
+// $theMeeting = new meeting($mtgDate, $this->getMtgType, $this->getMtgTitle);
 
 //#####################################
 //    MeeterPeep
@@ -1590,16 +1633,19 @@ class MeeterPeep{
     }
     public function getPerson($PID){
         //this loads the class with the person associated with PID
-        if ( isset( $connection ) ) return;
+        require_once ('auth/database.php');
+        $cn = mysqli_connect($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
+        
+//         if ( isset( $connection ) ) return;
         
         mysqli_report(MYSQLI_REPORT_STRICT);
         
-        define('DB_HOST', 'localhost');
-        define('DB_USER', 'dcolombo_muat');
-        define('DB_PASSWORD', 'MR0mans1212!');
-        define('DB_NAME', 'dcolombo_muat');
-        $mysqli = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-        $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+//         define('DB_HOST', 'localhost');
+//         define('DB_USER', 'dcolombo_muat');
+//         define('DB_PASSWORD', 'MR0mans1212!');
+//         define('DB_NAME', 'dcolombo_muat');
+//         $mysqli = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+//         $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         
         
         if (mysqli_connect_errno()) {
@@ -1652,7 +1698,7 @@ class MeeterPeep{
         }
 //         $this->defineAOS($PID);
         $result->close();
-        $connection->close();
+        $cn->close();
     }
 
     public function defineAOS($PID){

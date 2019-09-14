@@ -50,23 +50,25 @@
                     $fn = $row["FName"];
                     $ln = $row["LName"];
                     $aos = $row["AOS"];
-                    if(sizeof($aos)>0){
-                        // there are settings
-                        $peepCommit = explode("|", $aos);
-//                         echo "peepCommit size: " . sizeof($peepCommit) . "\n";
-                        $cnt = 0;
-                        foreach($peepCommit as $key => $value){
-                            
-                            $parts = explode(":", $value);
-//                             echo $cnt++ . "\t" . $value . "\t" . $parts[0] . "\t" . strlen($parts[0]) . "\n";
-                            if(strlen($parts[0])>0){
-//                                 echo "saving\n";
-                                $sadd = $connection->prepare("INSERT INTO Commits (ID, Category, FName, LName) VALUES (?, ?, ?, ?)");
-                                $sadd->bind_param("isss", $id, $parts[0], $fn, $ln);
-                                $sadd->execute();
-                                //                                 $sadd->close();
+                    if(isset($aos)){
+//                         if(sizeof($aos)>0){
+                            // there are settings
+                            $peepCommit = explode("|", $aos);
+    //                         echo "peepCommit size: " . sizeof($peepCommit) . "\n";
+                            $cnt = 0;
+                            foreach($peepCommit as $key => $value){
+                                
+                                $parts = explode(":", $value);
+    //                             echo $cnt++ . "\t" . $value . "\t" . $parts[0] . "\t" . strlen($parts[0]) . "\n";
+                                if(strlen($parts[0])>0){
+    //                                 echo "saving\n";
+                                    $sadd = $connection->prepare("INSERT INTO Commits (ID, Category, FName, LName) VALUES (?, ?, ?, ?)");
+                                    $sadd->bind_param("isss", $id, $parts[0], $fn, $ln);
+                                    $sadd->execute();
+                                    //                                 $sadd->close();
+                                }
                             }
-                        }
+//                         }
                     }
                 }
                 $sadd->close();
