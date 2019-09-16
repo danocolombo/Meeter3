@@ -10,6 +10,7 @@ if (! isset($_SESSION["MTR-SESSION-ID"])) {
 // require 'meeter.php';
 
 require 'mtrAOS.php';
+$aosConfig = new mConfig();
 // require 'meeter.php';  //this is used for the config of meeter app for client
 
 // require 'includes/database.inc.php';
@@ -21,7 +22,8 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 // include 'database.php';
 // ---------------------------------------------------
-// mtgForm 2.0
+// mtgFormNew
+// this is used to dispay a form for a new meeting
 // ---------------------------------------------------
 $client = $_SESSION["MTR-CLIENT"];
 
@@ -110,69 +112,6 @@ if (isset($_GET["ID"])) {
 } else {
     $MID = 0;
 }
-if ($MID > 0) {
-    $edit = TRUE;
-    // --------------------------------------------------
-    // get the meeting info from database
-    // --------------------------------------------------
-    $client = $_SESSION["MTR-CLIENT"];
-    $mtgUrl = "http://rogueintel.org/mapi/public/index.php/api/client/getMeeting/" . $client . "?mid=" . $MID;
-
-    $data = file_get_contents($mtgUrl);
-    $meetingArray = json_decode($data, true);
-    if (sizeof($meetingArray) < 1) {
-        echo "No meeting information found, contact your administrator";
-        exit();
-    }
-    $meeting = $meetingArray[0];
-    $tFlag = true;
-    if ($tFlag == true) {
-        $mtgID = $MID;
-        $mtgDate = $meeting["MtgDate"];
-        $mtgType = $meeting["MtgType"];
-        ;
-        $mtgTitle = $meeting["MtgTitle"];
-        $mtgFac = $meeting["MtgFac"];
-        $mtgAttendance = $meeting["MtgAttendance"];
-        $mtgWorship = $meeting["MtgWorship"];
-        $mtgMenu = $meeting["Meal"];
-        $mtgMealCnt = $meeting["MealCnt"];
-        $mtgNurseryCnt = $meeting["NurseryCnt"];
-        $mtgChildrenCnt = $meeting["ChildrenCnt"];
-        $mtgYouthCnt = $meeting["YouthCnt"];
-        $mtgNotes = $meeting["MtgNotes"];
-        $mtgDonations = $meeting["Donations"];
-        $mtgNewcomers1Fac = $meeting["Newcomers1Fac"];
-        $mtgNewcomers2Fac = $meeting["Newcomers2Fac"];
-        $mtgReader1Fac = $meeting["Reader1Fac"];
-        $mtgReader2Fac = $meeting["Reader2Fac"];
-        $mtgNurseryFac = $meeting["NurseryFac"];
-        $mtgChildrenFac = $meeting["ChildrenFac"];
-        $mtgYouthFac = $meeting["YouthFac"];
-        $mtgMealFac = $meeting["MealFac"];
-        $mtgCafeFac = $meeting["CafeFac"];
-        ;
-        $mtgTransportationFac = $meeting["TransportationFac"];
-        $mtgSetupFac = $meeting["SetupFac"];
-        $mtgTearDownFac = $meeting["TearDownFac"];
-        $mtgGreeter1Fac = $meeting["Greeter1Fac"];
-        $mtgGreeter2Fac = $meeting["Greeter2Fac"];
-        ;
-        $mtgChips1Fac = $meeting["Chips1Fac"];
-        $mtgChips2Fac = $meeting["Chips2Fac"];
-        $mtgResourcesFac = $meeting["ResourcesFac"];
-        $mtgTeachingFac = $meeting["TeachingFac"];
-        $mtgSerenityFac = $meeting["SerenityFac"];
-        $mtgAudioVisualFac = $meeting["AudioVisualFac"];
-        $mtgAnnouncementsFac = $meeting["AnnouncementsFac"];
-        $mtgSecurityFac = $meeting["SecurityFac"];
-    }
-
-    // echo "\$mtgTitle: $mtgTitle<br/>";
-    // echo "\$mtgMenu: $mtgMenu<br/>";
-    // echo "\$mtgNotes: $mtgNotes<br/>";
-    // exit();
-}
 // load the system configuration settings into object to use.
 $aosConfig->loadConfigFromDB();
 
@@ -229,69 +168,61 @@ $cn->close();
 
 <!-- Javascript -->
 <script>
-//             $( "#mtgDonations" ).keypress(function() {
-//             	var regex = new RegExp("^[a-zA-Z0-9]+$");
-//                 var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-//                 if (!regex.test(key)) {
-//                    event.preventDefault();
-//                    return false;
-//                 }
-//         	});
-			
-			function validateMtgForm(){
-				// start with validating the date value
-				$( "#mtgDate" ).datepicker();
-				var tmpString = "";
-				var m_Date = $( "#mtgDate" ).datepicker('getDate');
-				
-				var m_NewDate = $("#mtgDate").datepicker({ dateFormat: 'yyyy,mm,dd'}).val();
+//            
+	function validateMtgForm(){
+		// start with validating the date value
+		$( "#mtgDate" ).datepicker();
+		var tmpString = "";
+		var m_Date = $( "#mtgDate" ).datepicker('getDate');
+		
+		var m_NewDate = $("#mtgDate").datepicker({ dateFormat: 'yyyy,mm,dd'}).val();
 
-				if(isValidDate(m_NewDate) == false){
-					alert("please select an accurate date");
-					$("#mtgDate").datepicker("setDate", new Date());
-					$("#mtgDate").datepicker( "show" );
-					return false;
-				}
-				var m_type = $('input[name=rdoMtgType]:checked').attr('id');
-				if(m_type == "undefined"){
-					alert("Please select the type of meeting you are entering");
-					return false;
-				}
-				switch(m_type){
-				case "rdoLesson":
-					m_type = "Lesson";
-					break;
-				case "rdoTestimony":
-					m_type = "Testimony";
-					break;
-				case "rdoSpecial":
-					m_type = "Special";
-					break;
-				default:
-					alert("You have to select a Meeting Type.");
-					return false;
-					break;
-				}
-				
+		if(isValidDate(m_NewDate) == false){
+			alert("please select an accurate date");
+			$("#mtgDate").datepicker("setDate", new Date());
+			$("#mtgDate").datepicker( "show" );
+			return false;
+		}
+		var m_type = $('input[name=rdoMtgType]:checked').attr('id');
+		if(m_type == "undefined"){
+			alert("Please select the type of meeting you are entering");
+			return false;
+		}
+		switch(m_type){
+		case "rdoLesson":
+			m_type = "Lesson";
+			break;
+		case "rdoTestimony":
+			m_type = "Testimony";
+			break;
+		case "rdoSpecial":
+			m_type = "Special";
+			break;
+		default:
+			alert("You have to select a Meeting Type.");
+			return false;
+			break;
+		}
+		
 
-				if($("#mtgTitle").val().length<3){
-					alert("You need to provide a title longer than 2 characters");
-					$("#mtgTitle").focus();
-					return false;
-				}
-				// need to ensure that the donations text box is a monetary amount
-				var m_donations = $("#mtgDonations").val();
-				if ($("#mtgDonations").val().length<1){
-					$("#mtgDonations").val("0");
-				}else{
-					fDonations = +$("#mtgDonations").val();
-					if(isNaN(fDonations)){
-						tmpString = "You need to enter a numeric value for Donations";
-						$("#mtgDonations").val("");
-					}
-				}
-				//get the Meeting ID if set
-				var mtgID = <?php echo json_encode($MID);?>;
+		if($("#mtgTitle").val().length<3){
+			alert("You need to provide a title longer than 2 characters");
+			$("#mtgTitle").focus();
+			return false;
+		}
+		// need to ensure that the donations text box is a monetary amount
+		var m_donations = $("#mtgDonations").val();
+		if ($("#mtgDonations").val().length<1){
+			$("#mtgDonations").val("0");
+		}else{
+			fDonations = +$("#mtgDonations").val();
+			if(isNaN(fDonations)){
+				tmpString = "You need to enter a numeric value for Donations";
+				$("#mtgDonations").val("");
+			}
+		}
+		//get the Meeting ID if set
+		var mtgID = <?php echo json_encode($MID);?>;
 				if(mtgID == null){
 					document.getElementById("mtgForm").action = "mtgAction.php?Action=New";
 					
@@ -384,15 +315,10 @@ $cn->close();
 <script>
         	$(function() {
                 $( "#mtgDate" ).datepicker();
-                var meetingID = <?php echo json_encode($MID)?>;
-                //if there is a date value, co
-                console.print meetingID;
-                var meetingDate = <?php echo json_encode(date("m-d-Y", strtotime($mtgDate)));?>;
                 var daDate = new Date();
-                daDate = stringToDate(meetingDate,"mm-dd-yyyy","-");
-                if(meetingID != null){
-					$("#mtgDate").datepicker("setDate", daDate);
-                }
+                var dsplyDate = stringToDate(daDate,"mm-dd-yyyy", "-");
+				$("#mtgDate").datepicker("setDate", dsplyDate);
+                
              });
 		</script>
 </head>
@@ -415,15 +341,8 @@ $cn->close();
                      </script>
 		</div>
 		<article>
-			<?php
-if ($edit) {
-    echo "<form id=\"mtgForm\" action=\"mtgAction.php?Action=Update&MID=$mtgID\" method=\"post\">";
-    echo "<h2 id=\"formTitle\">Meeting Entry</h2>";
-} else {
-    echo "<form id=\"mtgForm\" action=\"mtgAction.php?Action=New\" method=\"post\">";
-    echo "<h2 id=\"formTitle\">New Meeting Entry</h2>";
-}
-?>
+            <form id="mtgForm" action="mtgAction.php?Action=New" method="post">
+            <h2 id="formTitle">New Meeting Entry</h2>
 				<table id="formTable">
 				<tr>
 					<td colspan="2">
@@ -437,30 +356,12 @@ if ($edit) {
 									<fieldset>
 										<legend>Meeting Type</legend>
 										<label for="rdoLesson">Lesson</label>
-                                          <?php
-                                        if ($mtgType == "Lesson") {
-                                            echo "<input type=\"radio\" name=\"rdoMtgType\" id=\"rdoLesson\" value=\"Lesson\" checked=\"checked\">";
-                                        } else {
-                                            echo "<input type=\"radio\" name=\"rdoMtgType\" id=\"rdoLesson\" value=\"Lesson\" >";
-                                        }
-                                        ?>                             
-                                          <label for="rdoTestimony">Testimony</label>
-                                          <?php
-                                        if ($mtgType == "Testimony") {
-                                            echo "<input type=\"radio\" name=\"rdoMtgType\" id=\"rdoTestimony\" value=\"Testimony\" checked=\"checked\">";
-                                        } else {
-                                            echo "<input type=\"radio\" name=\"rdoMtgType\" id=\"rdoTestimony\" value=\"Testimony\" >";
-                                        }
-                                        ?>
-                                          <label for="rdoSpecial">Special</label>
-                                          <?php
-                                        if ($mtgType == "Special") {
-                                            echo "<input type=\"radio\" name=\"rdoMtgType\" id=\"rdoSpecial\" value=\"Special\" checked=\"checked\">";
-                                        } else {
-                                            echo "<input type=\"radio\" name=\"rdoMtgType\" id=\"rdoSpecial\" value=\"Special\" >";
-                                        }
-                                        ?>
-                                        </fieldset>
+                                        <input type="radio" name="rdoMtgType" id="rdoLesson" value="Lesson" >
+                                        <label for="rdoTestimony">Testimony</label>
+                                        <input type="radio" name="rdoMtgType" id="rdoTestimony" value="Testimony" >
+                                        <label for="rdoSpecial">Special</label>
+                                        <input type="radio" name="rdoMtgType" id="rdoSpecial" value="Special" >
+                                    </fieldset>
 								</td>
 							</tr>
 						</table>
@@ -473,29 +374,17 @@ if ($edit) {
                 echo "<table>";
                 echo "<tr>";
                 echo "<td><div class=\"mtgLabels\" style=\"float:right\">Title:&nbsp;</div></td>";
-                echo "<td><input id=\"mtgTitle\" name=\"mtgTitle\" size=\"40\" style=\"font-size:14pt;\" type=\"text\" value=\"$mtgTitle\"/></td>";
+                echo "<td><input id=\"mtgTitle\" name=\"mtgTitle\" size=\"40\" style=\"font-size:14pt;\" type=\"text\" value='New Meeting'/></td>";
                 echo "</tr>";
                 echo "<tr>";
                 echo "<td><div class=\"mtgLabels\" style=\"float:right\">Host:</div></td>";
                 echo "<td><select id=\"mtgCoordinator\" name=\"mtgCoordinator\">";
                 $option = getHostsForMeeting();
                 foreach ($option as $id => $name) {
-                    if ($mtgFac == $id) {
-                        echo "<option value=\"$id\" SELECTED>$name</option>";
-                    } else {
-                        echo "<option value=\"$id\">$name</option>";
-                    }
+                    echo "<option value=\"$id\">$name</option>";
                 }
                 // add the ghost to the bottom
-                if ($edit) {
-                    if ($mtgFac == $_gid) {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    } else {
-                        echo "<option value=\"$_gid\">$_glabel</option>";
-                    }
-                } else {
-                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                }
+                echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                 echo "</select>";
                 echo "<a href=\"#\" title=\"Individuals defined as Hosts in Admin features.\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                 echo "</td>";
@@ -504,25 +393,14 @@ if ($edit) {
                 echo "<td><div class=\"mtgLabels\" style=\"float:right\">Attendance:</div></td>";
                 echo "<td><select id=\"mtgAttendance\" name=\"mtgAttendance\">";
                 for ($a = 0; $a < 201; $a ++) {
-                    if ($a == $mtgAttendance) {
-                        echo "<option value=\"" . $a . "\" selected>" . $a . "</option>";
-                    } else {
-                        echo "<option value=\"" . $a . "\">" . $a . "</option>";
-                    }
+                      echo "<option value=\"" . $a . "\">" . $a . "</option>";
                 }
                 echo "</select>";
                 echo "</td>";
                 echo "</tr>";
-                if ($aosConfig->getConfig("donations") == "true") {
-                    echo "<tr>";
-                    echo "<td><div class=\"mtgLabels\" style=\"float:right\">Donations:</div></td>";
-                    if(isset($mtgDonations)){
-                        $dvalue = $mtgDonations;
-                    }else {
-                        $dvalue = 0;
-                    }
-                    echo "<td><input id=\"mtgDonations\" name=\"mtgDonations\" size=\"6\" type=\"text\" value=\"" . $dvalue . "\"/></td>";
-                }
+                echo "<tr>";
+                echo "<td><div class=\"mtgLabels\" style=\"float:right\">Donations:</div></td>";
+                echo "<td><input id=\"mtgDonations\" name=\"mtgDonations\" size=\"6\" type=\"text\" value='0'/></td>";
                 echo "</tr>";
                 if ($aosConfig->getConfig("worship") == "true") {
                     // ================================
@@ -535,28 +413,11 @@ if ($edit) {
                     $option = getPeepsForService("worship");
                     
                     foreach ($option as $id => $name) {
-                        if ($mtgWorship == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost AND non-person to the bottom
-                    if ($edit) {
-                        if ($mtgWorship == $_npwid) {
-                            echo "<option value=\"$_npwid\" SELECTED>$_npwlabel</option>";
-                        } else {
-                            echo "<option value=\"$_npwid\">$_npwlabel</option>";
-                        }
-                        if ($mtgWorship == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_npwid\" SELECTED>$_npwlabel</option>";
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_npwid\" SELECTED>$_npwlabel</option>";
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
 //                     echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
 //                     echo "<tr><td colspan=2>";
@@ -571,22 +432,10 @@ if ($edit) {
                     echo "<td><select id=\"mtgAV\" name=\"mtgAV\">";
                     $option = getPeepsForService("av");
                     foreach ($option as $id => $name) {
-                        if ($mtgAudioVisualFac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgAudioVisualFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\"  title=\"People on A/V team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -599,22 +448,10 @@ if ($edit) {
                     echo "<td><select id=\"mtgSetup\" name=\"mtgSetup\">";
                     $option = getPeepsForService("setup");
                     foreach ($option as $id => $name) {
-                        if ($mtgSetupFac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgSetupFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on setup team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -627,22 +464,10 @@ if ($edit) {
                     echo "<td><select id=\"mtgTransportation\" name=\"mtgTransportation\">";
                     $option = getPeepsForService("transportation");
                     foreach ($option as $id => $name) {
-                        if ($mtgTransportationFac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgTransportationFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on transportation team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -657,41 +482,17 @@ if ($edit) {
                     echo "<select id=\"mtgGreeter1\" name=\"mtgGreeter1\">";
                     $option = getPeepsForService("greeter");
                     foreach ($option as $id => $name) {
-                        if ($mtgGreeter1Fac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgGreeter1Fac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<select id=\"mtgGreeter2\" name=\"mtgGreeter2\">";
                     foreach ($option as $id => $name) {
-                        if ($mtgGreeter2Fac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgGreeter2Fac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Greeting team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -705,22 +506,10 @@ if ($edit) {
                     echo "<td><select id=\"mtgResources\" name=\"mtgResources\">";
                     $option = getPeepsForService("resources");
                     foreach ($option as $id => $name) {
-                        if ($mtgResourcesFac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgResourcesFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on resource team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -739,16 +528,12 @@ if ($edit) {
                     echo "<table>";
                     if ($aosConfig->getConfig("menu") == "true") {
                         echo "<tr><td colspan=4><div class=\"mtgLabels\" style=\"float:left\">Menu:&nbsp;";
-                        echo "<input id=\"mtgMenu\" name=\"mtgMenu\" size=\"32\" maxlength=\"30\" style=\"font-size:14pt;\" type=\"text\" value=\"" . $mtgMenu . "\"/></div></td></tr>";
+                        echo "<input id=\"mtgMenu\" name=\"mtgMenu\" size=\"32\" maxlength=\"30\" style=\"font-size:14pt;\" type=\"text\"/></div></td></tr>";
                     }
                     echo "<tr><td><div class=\"mtgLabels\" style=\"float:right\">Served:&nbsp;</div></td>";
                     echo "<td><select id=\"mtgMealCnt\" name=\"mtgMealCnt\">";
                     for ($a = 0; $a < 201; $a ++) {
-                        if ($a == $mtgMealCnt) {
-                            echo "<option value=\"" . $a . "\" SELECTED>" . $a . "</option>";
-                        } else {
-                            echo "<option value=\"" . $a . "\">" . $a . "</option>";
-                        }
+                        echo "<option value=\"" . $a . "\">" . $a . "</option>";
                     }
                     echo "</select>";
                     echo "</td>";
@@ -756,22 +541,10 @@ if ($edit) {
                         echo "<td>" . $aosConfig->getDisplayString("mealFac") . "&nbsp;<select id=\"mtgMealFac\" name=\"mtgMealFac\">";
                         $option = getPeepsForService("mealFac");
                         foreach ($option as $id => $name) {
-                            if ($mtgMealFac == $id) {
-                                echo "<option value=\"$id\" SELECTED>$name</option>";
-                            } else {
-                                echo "<option value=\"$id\">$name</option>";
-                            }
+                            echo "<option value=\"$id\">$name</option>";
                         }
                         // add the ghost to the bottom
-                        if ($edit) {
-                            if ($mtgMealFac == $_gid) {
-                                echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                            } else {
-                                echo "<option value=\"$_gid\">$_glabel</option>";
-                            }
-                        } else {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        }
+                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                         echo "</select>";
                     } else {
                         echo "<td>";
@@ -794,41 +567,17 @@ if ($edit) {
                     echo "<select id=\"mtgReader1\" name=\"mtgReader1\">";
                     $option = getPeepsForService("reader");
                     foreach ($option as $id => $name) {
-                        if ($mtgReader1Fac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgReader1Fac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<select id=\"mtgReader2\" name=\"mtgReader2\">";
                     foreach ($option as $id => $name) {
-                        if ($mtgReader2Fac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgReader2Fac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Reader team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -843,57 +592,31 @@ if ($edit) {
                     echo "<select id=\"mtgAnnouncements\" name=\"mtgAnnouncements\">";
                     $option = getPeepsForService("announcements");
                     foreach ($option as $id => $name) {
-                        if ($mtgAnnouncementsFac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgAnnouncementsFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Announcement team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
                 }
-                if ($mtgType == "Lesson") {
-                    if ($aosConfig->getConfig("teaching") == "true") {
-                        // ================================
-                        // TEACHING IS TRUE = DISPLAY OPTION
-                        // ======================================
-                        echo "<tr><td>";
-                        echo "<div class=\"mtgLabels\" style=\"float:right\">" . $aosConfig->getDisplayString("teaching") . ":</div></td>";
-                        echo "<td>";
-                        echo "<select id=\"mtgTeaching\" name=\"mtgTeaching\">";
-                        $option = getPeepsForService("teaching");
-                        foreach ($option as $id => $name) {
-                            if ($mtgTeachingFac == $id) {
-                                echo "<option value=\"$id\" SELECTED>$name</option>";
-                            } else {
-                                echo "<option value=\"$id\">$name</option>";
-                            }
-                        }
-                        // add the ghost to the bottom
-                        if ($edit) {
-                            if ($mtgTeachingFac == $_gid) {
-                                echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                            } else {
-                                echo "<option value=\"$_gid\">$_glabel</option>";
-                            }
-                        } else {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        }
-                        echo "</select>";
-                        echo "<a href=\"#\" title=\"People on Teaching team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
-                        echo "</td></tr>";
+                if ($aosConfig->getConfig("teaching") == "true") {
+                    // ================================
+                    // TEACHING IS TRUE = DISPLAY OPTION
+                    // ======================================
+                    echo "<tr><td>";
+                    echo "<div class=\"mtgLabels\" style=\"float:right\">" . $aosConfig->getDisplayString("teaching") . ":</div></td>";
+                    echo "<td>";
+                    echo "<select id=\"mtgTeaching\" name=\"mtgTeaching\">";
+                    $option = getPeepsForService("teaching");
+                    foreach ($option as $id => $name) {
+                        echo "<option value=\"$id\">$name</option>";
                     }
+                    // add the ghost to the bottom
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
+                    echo "</select>";
+                    echo "<a href=\"#\" title=\"People on Teaching team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
+                    echo "</td></tr>";
                 }
                 if ($aosConfig->getConfig("chips") == "true") {
                     // ================================
@@ -905,41 +628,17 @@ if ($edit) {
                     echo "<select id=\"mtgChips1\" name=\"mtgChips1\">";
                     $option = getPeepsForService("chips");
                     foreach ($option as $id => $name) {
-                        if ($mtgChips1Fac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgChips1Fac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<select id=\"mtgChips2\" name=\"mtgChips2\">";
                     foreach ($option as $id => $name) {
-                        if ($mtgChips2Fac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgChips2Fac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Chips team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -954,41 +653,17 @@ if ($edit) {
                     echo "<select id=\"mtgNewcomers1\" name=\"mtgNewcomers1\">";
                     $option = getPeepsForService("newcomers");
                     foreach ($option as $id => $name) {
-                        if ($mtgNewcomers1Fac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgNewcomers1Fac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<select id=\"mtgNewcomers2\" name=\"mtgNewcomers2\">";
                     foreach ($option as $id => $name) {
-                        if ($mtgNewcomers2Fac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgNewcomers2Fac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Newcomers (101) team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -1003,22 +678,10 @@ if ($edit) {
                     echo "<select id=\"mtgSerenity\" name=\"mtgSerenity\">";
                     $option = getPeepsForService("serenity");
                     foreach ($option as $id => $name) {
-                        if ($mtgSerenityFac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgSerenityFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Serenity Prayer team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -1037,11 +700,7 @@ if ($edit) {
                         echo "<tr><td><div class=\"mtgLabels\" style=\"float:right\">Nursery:&nbsp;</div></td>";
                         echo "<td><select id=\"mtgNursery\" name=\"mtgNursery\">";
                         for ($a = 0; $a < 201; $a ++) {
-                            if ($a == $mtgNurseryCnt) {
-                                echo "<option value=\"" . $a . "\" SELECTED>" . $a . "</option>";
-                            } else {
-                                echo "<option value=\"" . $a . "\">" . $a . "</option>";
-                            }
+                            echo "<option value=\"" . $a . "\">" . $a . "</option>";
                         }
                         echo "</select>";
                         echo "</td>";
@@ -1049,22 +708,10 @@ if ($edit) {
                             echo "<td>" . $aosConfig->getDisplayString("nurseryFac") . "</td><td><select id=\"mtgNurseryFac\" name=\"mtgNurseryFac\">";
                             $option = getPeepsForService("nursery");
                             foreach ($option as $id => $name) {
-                                if ($mtgNurseryFac == $id) {
-                                    echo "<option value=\"$id\" SELECTED>$name</option>";
-                                } else {
-                                    echo "<option value=\"$id\">$name</option>";
-                                }
+                                echo "<option value=\"$id\">$name</option>";
                             }
                             // add the ghost to the bottom
-                            if ($edit) {
-                                if ($mtgNurseryFac == $_gid) {
-                                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                                } else {
-                                    echo "<option value=\"$_gid\">$_glabel</option>";
-                                }
-                            } else {
-                                echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                            }
+                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                             echo "</select></td>";
                         }
                         echo "</tr>";
@@ -1073,11 +720,7 @@ if ($edit) {
                         echo "<tr><td><div class=\"mtgLabels\" style=\"float:right\">Children:&nbsp;</div></td>";
                         echo "<td><select id=\"mtgChildren\" name=\"mtgChildren\">";
                         for ($a = 0; $a < 201; $a ++) {
-                            if ($a == $mtgChildrenCnt) {
-                                echo "<option value=\"" . $a . "\" SELECTED>" . $a . "</option>";
-                            } else {
-                                echo "<option value=\"" . $a . "\">" . $a . "</option>";
-                            }
+                            echo "<option value=\"" . $a . "\">" . $a . "</option>";
                         }
                         echo "</select>";
                         echo "</td>";
@@ -1085,22 +728,10 @@ if ($edit) {
                             echo "<td>" . $aosConfig->getDisplayString("childrenFac") . "</td><td><select id=\"mtgChildrenFac\" name=\"mtgChildrenFac\">";
                             $option = getPeepsForService("children");
                             foreach ($option as $id => $name) {
-                                if ($mtgChildrenFac == $id) {
-                                    echo "<option value=\"$id\" SELECTED>$name</option>";
-                                } else {
-                                    echo "<option value=\"$id\">$name</option>";
-                                }
+                                echo "<option value=\"$id\">$name</option>";
                             }
                             // add the ghost to the bottom
-                            if ($edit) {
-                                if ($mtgChildrenFac == $_gid) {
-                                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                                } else {
-                                    echo "<option value=\"$_gid\">$_glabel</option>";
-                                }
-                            } else {
-                                echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                            }
+                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                             echo "</select></td>";
                         }
                         echo "</tr>";
@@ -1109,11 +740,7 @@ if ($edit) {
                         echo "<tr><td><div class=\"mtgLabels\" style=\"float:right\">Youth:&nbsp;</div></td>";
                         echo "<td><select id=\"mtgYouth\" name=\"mtgYouth\">";
                         for ($a = 0; $a < 201; $a ++) {
-                            if ($a == $mtgYouthCnt) {
-                                echo "<option value=\"" . $a . "\" SELECTED>" . $a . "</option>";
-                            } else {
-                                echo "<option value=\"" . $a . "\">" . $a . "</option>";
-                            }
+                            echo "<option value=\"" . $a . "\">" . $a . "</option>";
                         }
                         echo "</select>";
                         echo "</td>";
@@ -1121,22 +748,10 @@ if ($edit) {
                             echo "<td>" . $aosConfig->getDisplayString("youthFac") . "</td><td><select id=\"mtgYouthFac\" name=\"mtgYouthFac\">";
                             $option = getPeepsForService("youth");
                             foreach ($option as $id => $name) {
-                                if ($mtgYouthFac == $id) {
-                                    echo "<option value=\"$id\" SELECTED>$name</option>";
-                                } else {
-                                    echo "<option value=\"$id\">$name</option>";
-                                }
+                                echo "<option value=\"$id\">$name</option>";
                             }
                             // add the ghost to the bottom
-                            if ($edit) {
-                                if ($mtgYouthFac == $_gid) {
-                                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                                } else {
-                                    echo "<option value=\"$_gid\">$_glabel</option>";
-                                }
-                            } else {
-                                echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                            }
+                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                             echo "</select></td>";
                         }
                         echo "</tr>";
@@ -1159,22 +774,10 @@ if ($edit) {
                     echo "<select id=\"mtgCafe\" name=\"mtgCafe\">";
                     $option = getPeepsForService("cafe");
                     foreach ($option as $id => $name) {
-                        if ($mtgCafeFac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgCafeFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Cafe team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -1189,22 +792,10 @@ if ($edit) {
                     echo "<select id=\"mtgTearDown\" name=\"mtgTearDown\">";
                     $option = getPeepsForService("teardown");
                     foreach ($option as $id => $name) {
-                        if ($mtgTearDownFac == $id) {
-                            echo "<option value=\"$id\" SELECTED>$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgTearDownFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Tear-Down team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -1220,22 +811,10 @@ if ($edit) {
                     echo "<select id=\"mtgSecurity\" name=\"mtgSecurity\">";
                     $option = getPeepsForService("security");
                     foreach ($option as $id => $name) {
-                        if ($mtgSecurityFac == $id) {
-                            echo "<option value=\"$id\">$name</option>";
-                        } else {
-                            echo "<option value=\"$id\">$name</option>";
-                        }
+                        echo "<option value=\"$id\">$name</option>";
                     }
                     // add the ghost to the bottom
-                    if ($edit) {
-                        if ($mtgSecurityFac == $_gid) {
-                            echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                        } else {
-                            echo "<option value=\"$_gid\">$_glabel</option>";
-                        }
-                    } else {
-                        echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
-                    }
+                    echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     echo "</select>";
                     echo "<a href=\"#\" title=\"People on Security team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a>";
                     echo "</td></tr>";
@@ -1249,12 +828,8 @@ if ($edit) {
 						<fieldset>
 							<legend>Notes and Comments</legend>
                               	<?php
-                            if (isset($mtgNotes) ) {
-                                echo "<textarea id=\"mtgNotes\" name=\"mtgNotes\" rows=\"5\" cols=\"80\">" . $mtgNotes . "</textarea>";
-                            } else {
                                 echo "<textarea id=\"mtgNotes\" name=\"mtgNotes\"  rows=\"5\" cols=\"80\"></textarea>";
-                            }
-                            ?>
+                                ?>
                         	</fieldset>
 					</td>
 				</tr>
@@ -1279,77 +854,7 @@ if ($edit) {
 				</tr>
 
 			</table>
-			<!-- ########################### -->
-			<!-- STARTING OPEN SHARE SECTION -->
-			<!-- ########################### -->
-			<?php
-
-if (($MID > 0) && ($_SESSION["MTR-ADMIN-FLAG"] == "1")) {
-    // don't show groups list if it is a new entry
-    ?>
-				<fieldset>
-				<legend>Open Share Groups</legend>
-				<div id="groupInformationArea"></div>
-			</fieldset>
-			<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-			<script>
-    			$(document).ready(function(){
-    				
-    				var theUrl = 'http://recovery.help/meeter/api/json/groups/getGroupsForMtgForm.php?client=UAT&MID='+<?php echo $MID?>;
-    				var output = '';
-        			$.ajax({
-        				url: theUrl,
-        				dataType: 'json',
-        				type: 'get',
-        				cache: false,
-        				success: function(data) {
-            				output += '<table border=1><tr>';
-            				<?php if($_SESSION["MTR-ADMIN-FLAG"] == "1"){?>
-                				output += '<th></th>';
-            				<?php }?>
-            				output += '<th>Title</th><th>Facilitator</th><th>Co-Facilitator</th><th>Location</th><th>#</th>';
-            				<?php if($_SESSION["MTR-ADMIN-FLAG"] == "1"){?>
-                				output += '<th></th>';
-            				<?php }?>
-            				output += '</tr>';
-        					$(data.groups).each(function(index, value){
-    //     							console.log(value.Title);
-//         							output += '<tr><td>'+value.Title+'</td></tr>';
-									output += '<tr>';
-									<?php if($_SESSION["MTR-ADMIN-FLAG"] == "1"){?>
-										output += '<td valign=\'center\' style=\'padding: 5px\'>';
-										var editLink = 'grpForm.php?GID='+value.ID+'&MID='+<?php echo $MID; ?>+'&Action=Edit';
-										output += '<a href=\''+editLink+'\'><img src=\'images/btnEdit.gif\' alt=\"(edit)\"></img></a></td>';
-									<?php }?>
-									output += '<td style=\'padding: 5px\'>'+value.Title+'</td>';
-									output += '<td style=\'padding: 10px; text-align: center;\'>'+value.FacFirstName+'</td>';
-									output += '<td style=\'padding: 10px; text-align: center;\'>'+value.CoFirstName+'</td>';
-									output += '<td>'+value.Location+'</td>';
-									output += '<td align=\'center\' style=\'left-padding: 5px; right-padding: 5px;\'>'+value.Attendance+'</td>';
-									<?php if($_SESSION["MTR-ADMIN-FLAG"] == "1"){?>
-    									editLink = 'mtgAction.php?Action=DeleteGroup&MID='+<?php echo $MID;?>+'&GID='+value.ID;
-    									output += '<td width=15px; alight=\'right\'><a href=\''+editLink+'\'><img src=\'images/minusbutton.gif\' alt=\"(remove)\"></img></a></td>';
-									<?php }?>
-									output += '</tr>';
-	
-        					});
-        					output += '</table>';
-        					$('#groupInformationArea').append(output);
-    					},
-    					error : function(xhr, ajaxOptions, thrownError){
-    						var createCall = 'mtgAction.php?Action=PreLoadGroups&MID='+<?php echo $MID;?>
-    						
-							output = '<a href="'+createCall+'"><img src="images/btnGetLastWeek.png" alt=\"(previous)\"></img></a>';
-				           		$('#groupInformationArea').append(output);
-    			       	}
-    					
-        			});
-    			});
-				</script>	
-			<?php } ?>
-			<!-- ########################### -->
-			<!--  ENDING OPEN SHARE SECTION  -->
-			<!-- ########################### -->
+			
 			</form>
 
 		</article>
@@ -1358,39 +863,6 @@ if (($MID > 0) && ($_SESSION["MTR-ADMIN-FLAG"] == "1")) {
 			$( "#footerArea" ).load( "footer.php" );
 		</script>
 	</div>
-	<script>
-	
-//          $(function() {
-             
-            // MEETING TYPE
-            //$( "input[type='radio']" ).checkboxradio();
-            //$("#radios").buttonset();
-
-            //$( "#mtgWorship" ).selectMenu();
-            
-			// ATTENDANCE SPINNER
-            	//var x = <?php echo $mtgAttendance; ?>;
-            //$( "#spnrAttendance" ).spinner("value", x );
-			//$( "#spnrAttendance" ).spinner("value", 5 );
-			
-//             // CANCEL BUTTON
-//             $( "#btnCancel" ). button({
-//                 label: "Cancel"
-//             });
-            //$("#btnCancel").button("option", "label", "Cancel");
-
-            // SUBMIT BUTTON
-//             $( "#btnSubmit" ).button({
-// 				label: "Submit",
-//             });
-// 			$( "#btnSubmit").click(function(){
-// 				validateMtgForm();
-// 			});
-// 			$( "#btnCancel").click(function(){
-// 				cancelMtgForm();
-// 			});
-//          });
-      </script>
 
 </body>
 </html>
