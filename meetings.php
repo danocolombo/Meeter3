@@ -99,7 +99,7 @@ $client = $_SESSION["MTR-CLIENT"];
     
     /* add a link to enter a new meeting record - IF USER IS ADMIN*/
     if($_SESSION["MTR-ADMIN-FLAG"] == "1"){
-        echo "<div style='text-align:right; padding-right: 20px;'><a href='mtgForm.php'>NEW ENTRY</a><br/>";
+        echo "<div style='text-align:right; padding-right: 20px;'><a href='mtgFormNew.php'>NEW ENTRY</a><br/>";
     }else{
         echo "<div style='text-align:right; padding-right: 20px;'><br/>";
     }
