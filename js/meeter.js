@@ -66,12 +66,13 @@ function SelectNoInterests(){
 	document.getElementById('cbChips').checked = false;
     return false;
 }
-function stringToDate(_dateIn,_format,_delimiter)
+function stringToDate(_dateIn1,_format,_delimiter)
 {
 	// this returns a date in a variety of formats
 	//	stringToDate("17/9/2014","dd/MM/yyyy","/");
 	//	stringToDate("9/17/2014","mm/dd/yyyy","/")
 	//	stringToDate("9-17-2014","mm-dd-yyyy","-")
+	var _dateIn = String(_dateIn1);
     var formatLowerCase=_format.toLowerCase();
     var formatItems=formatLowerCase.split(_delimiter);
     var dateItems=_dateIn.split(_delimiter);

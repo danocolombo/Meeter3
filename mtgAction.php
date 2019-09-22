@@ -144,6 +144,15 @@ function addMeetingToDB(){
     // ????????????????????????????????????????????????????
     // need to check if a similar meeting is already loaded
     // ????????????????????????????????????????????????????
+    // the values to check for are:
+    // mtgDate
+    // mtgType
+    // mtgTitle
+    
+    
+    
+    
+    
     $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     // Check connection
     if ($connection->connect_error) {
@@ -306,17 +315,17 @@ function updateMeetingInDB(){
     $tm->setSecurityFac($_POST["mtgSecurity"]);
     $tm->setNotes($_POST["mtgNotes"]);
     
-    print_r($tm);
+    //print_r($tm);
     
     /* ---------------------------------------------------------------------
      * ---------------------------------------------------------------------
-     *   create AWS DynamoDB object and insert value
+     *   create AWS DynamoDB object and insert/update meeting
      * ---------------------------------------------------------------------
      * ---------------------------------------------------------------------
      */
     
-    echo "<br/><br/>lets do this...<br/>";
-
+    // this section does a sample update to the mtr.user table.
+    
     $sdk = new Aws\Sdk([        
         'region'   => 'us-east-1',
         'version'  => 'latest',

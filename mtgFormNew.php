@@ -222,15 +222,17 @@ $cn->close();
 			}
 		}
 		//get the Meeting ID if set
-		var mtgID = <?php echo json_encode($MID);?>;
-				if(mtgID == null){
-					document.getElementById("mtgForm").action = "mtgAction.php?Action=New";
+		//var mtgID = <?php echo json_encode($MID);?>;
+		//alert(mtgID);
+		//		if(mtgID == null){
 					
-				}else{
-					var updateAction = "mtgAction.php?Action=Update&ID=" + mtgID;
-					document.getElementById("mtgForm").action = updateAction;
-				}
-				document.getElementById("mtgForm").submit();
+		document.getElementById("mtgForm").action = "mtgAction.php?Action=New";
+					
+// 				}else{
+// 					var updateAction = "mtgAction.php?Action=Update&ID=" + mtgID;
+// 					document.getElementById("mtgForm").action = updateAction;
+// 				}
+// 				document.getElementById("mtgForm").submit();
 			}
 			function cancelMtgForm(){
 				var dest = "meetings.php";
