@@ -8,11 +8,12 @@ if (! isset($_SESSION["MTR-SESSION-ID"])) {
 }
 include './vendor/autoload.php';
 require 'vendor/autoload.php';
+include 'meeting.php';
 date_default_timezone_set('UTC');
 use Aws\DynamoDb\Exception\DynamoDbException;
 
 include 'mtgRedirects.php';
-include 'meeting.php';
+//include 'meeting.php';
 // require 'meeter.php';
 // require 'includes/database.inc.php';
 //require 'includes/meeting.inc.php';
@@ -57,6 +58,8 @@ function addMeetingToDB(){
     //     OR die(mysql_error());
     
     //we are going to check our values:
+    
+
     
     $mtgDate = $_POST['mtgDate'];
     $mtgType = $_POST['rdoMtgType'];
@@ -148,9 +151,6 @@ function addMeetingToDB(){
     // mtgDate
     // mtgType
     // mtgTitle
-    
-    
-    
     
     
     $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);

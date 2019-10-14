@@ -176,7 +176,7 @@ $cn->close();
 		var m_Date = $( "#mtgDate" ).datepicker('getDate');
 		
 		var m_NewDate = $("#mtgDate").datepicker({ dateFormat: 'yyyy,mm,dd'}).val();
-
+		
 		if(isValidDate(m_NewDate) == false){
 			alert("please select an accurate date");
 			$("#mtgDate").datepicker("setDate", new Date());
@@ -204,7 +204,6 @@ $cn->close();
 			break;
 		}
 		
-
 		if($("#mtgTitle").val().length<3){
 			alert("You need to provide a title longer than 2 characters");
 			$("#mtgTitle").focus();
@@ -225,93 +224,94 @@ $cn->close();
 		//var mtgID = <?php echo json_encode($MID);?>;
 		//alert(mtgID);
 		//		if(mtgID == null){
-					
 		document.getElementById("mtgForm").action = "mtgAction.php?Action=New";
+		document.getElementById("mtgForm").submit();
 					
 // 				}else{
 // 					var updateAction = "mtgAction.php?Action=Update&ID=" + mtgID;
 // 					document.getElementById("mtgForm").action = updateAction;
 // 				}
-// 				document.getElementById("mtgForm").submit();
-			}
-			function cancelMtgForm(){
-				var dest = "meetings.php";
-				window.location.href=dest;
-			}
+// 		document.getElementById("mtgForm").submit();
 
-			function isValidDate(dateString){
-				// First check for the pattern
-			    if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateString))
-			        return false;
+	}
+	function cancelMtgForm(){
+		var dest = "meetings.php";
+		window.location.href=dest;
+	}
 
-			    // Parse the date parts to integers
-			    var parts = dateString.split("/");
-			    var day = parseInt(parts[1], 10);
-			    var month = parseInt(parts[0], 10);
-			    var year = parseInt(parts[2], 10);
+	function isValidDate(dateString){
+		// First check for the pattern
+	    if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateString))
+	        return false;
 
-			    // Check the ranges of month and year
-			    if(year < 1000 || year > 3000 || month == 0 || month > 12)
-			        return false;
+	    // Parse the date parts to integers
+	    var parts = dateString.split("/");
+	    var day = parseInt(parts[1], 10);
+	    var month = parseInt(parts[0], 10);
+	    var year = parseInt(parts[2], 10);
 
-			    var monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+	    // Check the ranges of month and year
+	    if(year < 1000 || year > 3000 || month == 0 || month > 12)
+	        return false;
 
-			    // Adjust for leap years
-			    if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
-			        monthLength[1] = 29;
+	    var monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 
-			    // Check the range of the day
-			    return day > 0 && day <= monthLength[month - 1];
-			}
+	    // Adjust for leap years
+	    if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+	        monthLength[1] = 29;
+
+	    // Check the range of the day
+	    return day > 0 && day <= monthLength[month - 1];
+	}
 			
-			function importedValidation(){
-				// if user is trying to delete system user "Removed User", then echo message that
-				// action is not possible. 
-				//--------------------------------------------------------------------------------
-				var mDate = $("mtgDate").value;
-				alert(mDate);
-				var FName = document.forms["peepForm"]["peepFName"].value;
-				var LName = document.forms["peepForm"]["peepLName"].value;
-				if(FName == "Removed" && LName == "User"){
-					// user is trying to delete system entry. Post warning and abort
-					alert("The entry you are trying to delete is used by the system, and can\'t be removed");
-					return false;
-				}
-				//check if the current user is set to active
-				var aFlag = document.getElementById("peepActive").checked;
-				if(aFlag == true){
-					alert("It is recommended you make the person \'inactive\' rather than deleting.");
-					var x = confirm("Press OK if you want to really delete. All references in the system will be lost");
-					if (x == true){
-						var recordID = getUrlVars()["PID"];
-						var newURL = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
-// 						window.location.href=newURL;
-						$("#mtgForm").submit();
-						return true;	
-					}else{
-						return false;
-					}
-				}
-				var x2 = confirm("Click \'OK\' if you are sure you want to delete this user.");
-				if (x2 == true){
-					var recordID = getUrlVars()["PID"];
-					//alert(recordID);
-					//alert("DELETE");
-					var dest = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
-// 					window.location.href=dest;
-// 					$("#mtgForm").submit();
-				}else{
-					alert("Delete User aborted.");
-					return false;
-				}
+	function importedValidation(){
+		// if user is trying to delete system user "Removed User", then echo message that
+		// action is not possible. 
+		//--------------------------------------------------------------------------------
+		var mDate = $("mtgDate").value;
+		alert(mDate);
+		var FName = document.forms["peepForm"]["peepFName"].value;
+		var LName = document.forms["peepForm"]["peepLName"].value;
+		if(FName == "Removed" && LName == "User"){
+			// user is trying to delete system entry. Post warning and abort
+			alert("The entry you are trying to delete is used by the system, and can\'t be removed");
+			return false;
+		}
+		//check if the current user is set to active
+		var aFlag = document.getElementById("peepActive").checked;
+		if(aFlag == true){
+			alert("It is recommended you make the person \'inactive\' rather than deleting.");
+			var x = confirm("Press OK if you want to really delete. All references in the system will be lost");
+			if (x == true){
+				var recordID = getUrlVars()["PID"];
+				var newURL = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
+// 				window.location.href=newURL;
+				$("#mtgForm").submit();
+				return true;	
+			}else{
+				return false;
 			}
-			function getUrlVars() {
-			    var vars = {};
-			    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-			        vars[key] = value;
-			    });
-			    return vars;
-			}
+		}
+		var x2 = confirm("Click \'OK\' if you are sure you want to delete this user.");
+		if (x2 == true){
+			var recordID = getUrlVars()["PID"];
+			//alert(recordID);
+			//alert("DELETE");
+			var dest = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
+// 				window.location.href=dest;
+// 				$("#mtgForm").submit();
+		}else{
+			alert("Delete User aborted.");
+			return false;
+		}
+	}
+	function getUrlVars() {
+	    var vars = {};
+	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	        vars[key] = value;
+	    });
+	    return vars;
+	}
         </script>
 <script src="js/farinspace/jquery.imgpreload.min.js"></script>
 <script>

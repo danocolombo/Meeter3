@@ -777,6 +777,6 @@ class meeting
     }
 }
 
-
+$daMtg = new meeting();
 
 ?>
