@@ -73,6 +73,7 @@ if (! isset($result)) {
 while ($row = mysqli_fetch_array($result)) {
     $_glabel = $row[0];
 }
+$_SESSION["MTR-GHOST_ID"] = $_gid;
 // need to tidy up before calling next proc
 $result->close();
 $cn->next_result();

@@ -633,6 +633,39 @@ class meeting
         $this->setMtgDate($mDate);
         $this->setMtgType($mType);
         $this->setMtgTitle($mTitle);
+        
+        $ghost = $_SESSION["MTR-GHOST_ID"];
+        $this->setAnnouncementsFac($ghost);
+        $this->setAudioVisualFac($ghost);
+        $this->setCafeFac($ghost);
+        $this->setChildrenCnt(0);
+        $this->setChildrenFac($ghost);
+        $this->setChips1Fac($ghost);
+        $this->setChips2Fac($ghost);
+        $this->setDonations(0);
+        $this->setGreeter1Fac($ghost);
+        $this->setGreeter2Fac($ghost);
+        $this->setMealCnt(0);
+        $this->setMealFac($ghost);
+        $this->setMenu("");
+        $this->setMtgAttendance(0);
+        $this->setMtgHost($ghost);
+        $this->setNewcomers1Fac($ghost);
+        $this->setNewcomers2Fac($ghost);
+        $this->setNotes("");
+        $this->setNurseryCnt(0);
+        $this->setNurseryFac($ghost);
+        $this->setReader1Fac($ghost);
+        $this->setReader2Fac($ghost);
+        $this->setResourcesFac($ghost);
+        $this->setSecurityFac($ghost);
+        $this->setSetupFac($ghost);
+        $this->setTeachingFac($ghost);
+        $this->setTearDownFac($ghost);
+        $this->setTransportationFac($ghost);
+        $this->setWorshipFac($ghost);
+        $this->setYouthCnt(0);
+        $this->setYouthFac($ghost);
     }
     public function printMeeting()
     {
@@ -777,6 +810,5 @@ class meeting
     }
 }
 
-$daMtg = new meeting();
 
 ?>

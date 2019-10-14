@@ -58,50 +58,59 @@ function addMeetingToDB(){
     //     OR die(mysql_error());
     
     //we are going to check our values:
+    $daMtg = new meeting($_POST['mtgDate'], $_POST['rdoMtgType'], $_POST['mtgTitle']);
     
-
+//     $daMtg->setMtgDate($_POST['mtgDate']);
+//     $daMtg->setMtgType($_POST['rdoMtgType']);
+//     $daMtg->setMtgTitle($_POST['mtgTitle']);
     
-    $mtgDate = $_POST['mtgDate'];
-    $mtgType = $_POST['rdoMtgType'];
-    $mtgTitle = $_POST['mtgTitle'];
+    $daMtg->setMtgHost($_POST['mtgCoordinator']);
+    $daMtg->setMtgAttendance($_POST['mtgAttendance']);
+    $daMtg->setDonations($_POST['mtgDonations']);
+    $daMtg->setWorshipFac($_POST['mtgWorship']);
+    $daMtg->setAudioVisualFac($_POST['mtgAV']);
+    $daMtg->setSetupFac($_POST['mtgSetup']);
+    $daMtg->setTransportationFac($_POST['mtgTransportation']);
+    $daMtg->setGreeter1Fac($_POST['mtgGreeter1']);
+    $daMtg->setGreeter2Fac($_POST['mtgGreeter2']);
+    $daMtg->setResourcesFac($_POST['mtgResources']);
     
-    $mtgFac = $_POST['mtgCoordinator'];
-    $mtgAttendance = $_POST['mtgAttendance'];
-    $mtgDonations = $_POST['mtgDonations'];
-    $mtgWorshipFac = $_POST['mtgWorship'];
-    $mtgAudioVisualFac = $_POST['mtgAV'];
-    $mtgSetupFac = $_POST['mtgSetup'];
-    $mtgTransportationFac = $_POST['mtgTransportation'];
-    $mtgGreeter1Fac = $_POST['mtgGreeter1'];
-    $mtgGreeter2Fac = $_POST['mtgGreeter2'];
-    $mtgResourcesFac = $_POST['mtgResources'];
+    $daMtg->setMenu($_POST['mtgMenu']);
+    $daMtg->setMealCnt($_POST['mtgMealCnt']);
+    $daMtg->setMealFac($_POST['mtgMealFac']);
     
-    $mtgMenu = $_POST['mtgMenu'];
-    $mtgMealCnt = $_POST['mtgMealCnt'];
-    $mtgMealFac = $_POST['mtgMealFac'];
+    $daMtg->setReader1Fac($_POST['mtgReader1']);
+    $daMtg->setReader2Fac($_POST['mtgReader2']);
+    $daMtg->setAnnouncementsFac($_POST['mtgAnnouncements']);
+    $daMtg->setTeachingFac($_POST['mtgTeaching']);
+    $daMtg->setChips1Fac($_POST['mtgChips1']);
+    $daMtg->setChips2Fac($_POST['mtgChips2']);
+    $daMtg->setNewcomers1Fac($_POST['mtgNewcomers1']);
+    $daMtg->setNewcomers2Fac($_POST['mtgNewcomers2']);
+    $daMtg->setSerenityFac($_POST['mtgSerenity']);
     
-    $mtgReader1Fac = $_POST['mtgReader1'];
-    $mtgReader2Fac = $_POST['mtgReader2'];
-    $mtgAnnouncementsFac = $_POST['mtgAnnouncements'];
-    $mtgTeachingFac = $_POST['mtgTeaching'];
-    $mtgChips1Fac = $_POST['mtgChips1'];
-    $mtgChips2Fac = $_POST['mtgChips2'];
-    $mtgNewcomers1Fac = $_POST['mtgNewcomers1'];
-    $mtgNewcomers2Fac = $_POST['mtgNewcomers2'];
-    $mtgSerenityFac = $_POST['mtgSerenity'];
+    $daMtg->setNurseryCnt($_POST['mtgNursery']);
+    $daMtg->setNurseryFac($_POST['mtgNurseryFac']);
+    $daMtg->setChildrenCnt($_POST['mtgChildren']);
+    $daMtg->setChildrenFac($_POST['mtgChildrenFac']);
+    $daMtg->setYouthCnt($_POST['mtgYouth']);
+    $daMtg->setYouthFac($_POST['mtgYouthFac']);
     
-    $mtgNurseryCnt = $_POST['mtgNursery'];
-    $mtgNurseryFac = $_POST['mtgNurseryFac'];
-    $mtgChildrenCnt = $_POST['mtgChildren'];
-    $mtgChildrenFac = $_POST['mtgChildrenFac'];
-    $mtgYouthCnt = $_POST['mtgYouth'];
-    $mtgYouthFac = $_POST['mtgYouthFac'];
     
-    $mtgCafeFac = $_POST['mtgCafe'];
-    $mtgTearDownFac = $_POST['mtgTearDown'];
-    $mtgSecurityFac = $_POST['mtgSecurity'];
+    if(isset($_POST['mtgCafe'])){
+        $daMtg->setCafeFac($_POST['mtgCafe']);
+    }
+    $daMtg->setTearDownFac($_POST['mtgTearDown']);
+    if(isset($_POST['mtgSecurity'])){
+        if(sizeof($_POST['mtgSecurity'])>0){
+            $daMtg->setSecurityFac($_POST['mtgSecurity']);
+        }   
+    }
+    $daMtg->setNotes($_POST['mtgNotes']); 
     
-    $mtgNotes = $_POST['mtgNotes'];
+    print_r($daMtg);
+    exit();
+    
     
     //         echo "\$mtgDate: " . $mtgDate . "<br/>";
     //         echo "\$mtgType: $mtgType<br/>";
