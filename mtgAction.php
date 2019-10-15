@@ -59,6 +59,7 @@ function addMeetingToDB(){
     //we are going to check our values:
     $daMtg = new meeting($_POST['mtgDate'], $_POST['rdoMtgType'], $_POST['mtgTitle']);
     
+<<<<<<< HEAD
     if(isset($_POST['mtgCoordinator'])){$daMtg->setMtgHost($_POST['mtgCoordinator']);}
     if(isset($_POST['mtgAttendance'])){$daMtg->setMtgAttendance($_POST['mtgAttendance']);}
     if(isset($_POST['mtgDonations'])){$daMtg->setDonations($_POST['mtgDonations']);}
@@ -98,6 +99,98 @@ function addMeetingToDB(){
     //meeting object should be loaded with values
 //     print_r($daMtg);
 //     exit();
+=======
+//     $daMtg->setMtgDate($_POST['mtgDate']);
+//     $daMtg->setMtgType($_POST['rdoMtgType']);
+//     $daMtg->setMtgTitle($_POST['mtgTitle']);
+    
+    $daMtg->setMtgHost($_POST['mtgCoordinator']);
+    $daMtg->setMtgAttendance($_POST['mtgAttendance']);
+    $daMtg->setDonations($_POST['mtgDonations']);
+    $daMtg->setWorshipFac($_POST['mtgWorship']);
+    $daMtg->setAudioVisualFac($_POST['mtgAV']);
+    $daMtg->setSetupFac($_POST['mtgSetup']);
+    $daMtg->setTransportationFac($_POST['mtgTransportation']);
+    $daMtg->setGreeter1Fac($_POST['mtgGreeter1']);
+    $daMtg->setGreeter2Fac($_POST['mtgGreeter2']);
+    $daMtg->setResourcesFac($_POST['mtgResources']);
+    
+    $daMtg->setMenu($_POST['mtgMenu']);
+    $daMtg->setMealCnt($_POST['mtgMealCnt']);
+    $daMtg->setMealFac($_POST['mtgMealFac']);
+    
+    $daMtg->setReader1Fac($_POST['mtgReader1']);
+    $daMtg->setReader2Fac($_POST['mtgReader2']);
+    $daMtg->setAnnouncementsFac($_POST['mtgAnnouncements']);
+    $daMtg->setTeachingFac($_POST['mtgTeaching']);
+    $daMtg->setChips1Fac($_POST['mtgChips1']);
+    $daMtg->setChips2Fac($_POST['mtgChips2']);
+    $daMtg->setNewcomers1Fac($_POST['mtgNewcomers1']);
+    $daMtg->setNewcomers2Fac($_POST['mtgNewcomers2']);
+    $daMtg->setSerenityFac($_POST['mtgSerenity']);
+    
+    $daMtg->setNurseryCnt($_POST['mtgNursery']);
+    $daMtg->setNurseryFac($_POST['mtgNurseryFac']);
+    $daMtg->setChildrenCnt($_POST['mtgChildren']);
+    $daMtg->setChildrenFac($_POST['mtgChildrenFac']);
+    $daMtg->setYouthCnt($_POST['mtgYouth']);
+    $daMtg->setYouthFac($_POST['mtgYouthFac']);
+    
+    
+    if(isset($_POST['mtgCafe'])){
+        $daMtg->setCafeFac($_POST['mtgCafe']);
+    }
+    $daMtg->setTearDownFac($_POST['mtgTearDown']);
+    if(isset($_POST['mtgSecurity'])){
+        if(sizeof($_POST['mtgSecurity'])>0){
+            $daMtg->setSecurityFac($_POST['mtgSecurity']);
+        }   
+    }
+    $daMtg->setNotes($_POST['mtgNotes']); 
+    
+    print_r($daMtg);
+    exit();
+    
+    
+    //         echo "\$mtgDate: " . $mtgDate . "<br/>";
+    //         echo "\$mtgType: $mtgType<br/>";
+    //         echo "\$mtgTitle: $mtgTitle<br/>";
+    //         echo "\$mtgFac: $mtgFac<br/>";
+    //         echo "\$mtgAttendance: $mtgAttendance<br/>";
+    //         echo "\$mtgDonations: $mtgDonations<br/>";
+    //         echo "\$mtgWorshipFac: $mtgWorshipFac<br/>";
+    //         echo "\$mtgAudioVisualFac: $mtgAudioVisualFac<br/>";
+    //         echo "\$mtgSetupFac: $mtgSetupFac<br/>";
+    //         echo "\$mtgTransportationFac: $mtgTransportationFac<br/>";
+    //         echo "\$mtgGreeter1Fac: $mtgGreeter1Fac<br/>";
+    //         echo "\$mtgGreeter2Fac: $mtgGreeter2Fac<br/>";
+    //         echo "\$mtgResourcesFac: $mtgResourcesFac<br/>";
+    //         echo "\$mtgMenu: $mtgMenu<br/>";
+    //         echo "\$mtgMealCnt: $mtgMealCnt<br/>";
+    //         echo "\$mtgMealFac: $mtgMealFac<br/>";
+    
+    //         echo "\$mtgReader1Fac: $mtgReader1Fac<br/>";
+    //         echo "\$mtgReader2Fac: $mtgReader2Fac<br/>";
+    //         echo "\$mtgAnnouncementsFac: $mtgAnnouncementsFac<br/>";
+    //         echo "\$mtgTeachingFac: $mtgTeachingFac<br/>";
+    
+    //         echo "\$mtgChips1Fac: $mtgChips1Fac<br/>";
+    //         echo "\$mtgChips2Fac: $mtgChips2Fac<br/>";
+    //         echo "\$mtgNewcomers1Fac: $mtgNewcomers1Fac<br/>";
+    //         echo "\$mtgNewcomers2Fac: $mtgNewcomers2Fac<br/>";
+    //         echo "\$mtgSerenityFac: $mtgSerenityFac<br/>";
+    //         echo "\$mtgNurseryCnt: $mtgNurseryCnt<br/>";
+    //         echo "\$mtgNurseryFac: $mtgNurseryFac<br/>";
+    //         echo "\$mtgChildrenCnt: $mtgChildrenCnt<br/>";
+    //         echo "\$mtgChildrenFac: $mtgChildrenFac<br/>";
+    //         echo "\$mtgYouthCnt: $mtgYouthCnt<br/>";
+    //         echo "\$mtgYouthFac: $mtgYouthFac<br/>";
+    //         echo "\$mtgCafeFac: $mtgCafeFac<br/>";
+    //         echo "\$mtgTearDownFac: $mtgTearDownFac<br/>";
+    //         echo "\$mtgSecurityFac: $mtgSecurityFac<br/>";
+    //         echo "\$mtgNotes: $mtgNotes<br/>";
+    //         exit();
+>>>>>>> branch 'master' of https://github.com/danocolombo/Meeter3.git
     
     
     
