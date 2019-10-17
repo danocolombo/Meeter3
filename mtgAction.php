@@ -99,6 +99,9 @@ function addMeetingToDB(){
 //     print_r($daMtg);
 //     exit();
     
+    //=============================================
+    // check to see if meeting, type and title exist
+    // http://rogueintel.org/mapi/public/index.php/api/client/getIdForDTT/ccc?mtgDate=2019-08-01&mtgType=Lesson&mtgTitle=Victory
     
     
     // ????????????????????????????????????????????????????
@@ -143,9 +146,10 @@ function addMeetingToDB(){
 //     echo "<br>Here is what we are going to save....<br>";
 //     print_r($daMtg);
 //     exit();
+    
     // API to insert meeting
     $url = 'http://rogueintel.org/mapi/public/index.php/api/meeting/create/' . $_SESSION["MTR-CLIENT"];
-    
+    //$url =  'https://282lcxarb7.execute-api.us-east-1.amazonaws.com/QA/meeting/create/' . $_SESSION["MTR-CLIENT"];
     
     $ch = curl_init($url);
     //encode daMtr class
@@ -159,7 +163,6 @@ function addMeetingToDB(){
     
     //execute
     $result = curl_exec($ch);
-    
     
     
 //     //     $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
