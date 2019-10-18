@@ -21,14 +21,14 @@ include 'mtgRedirects.php';
  * mtgAction.php
  */
 $Action = $_GET['Action'];
-
+$MID = $_GET['ID'];
 switch ($Action){
     case "New":
         addMeetingToDB();
         exit;
     case "Update":
-        $MID = $_GET['ID'];
-        updateMeetingInDB();
+        
+        updateMeetingInDB($MID);
         exit;
     case "DeleteGroup":
         deleteGroup();
@@ -259,12 +259,10 @@ function addMeetingToDB(){
     destination(307, "meetings.php");
     
 }
-function updateMeetingInDB(){
+function updateMeetingInDB($MID){
     /*
      * this routine updates an existing record in the database
      */
-    echo "IN updateMeetingInDB function<br/>";
-    $MID = $_GET['ID'];
     
     //load all the form data into a class object
     $mDate = $_POST["mtgDate"];
@@ -272,6 +270,8 @@ function updateMeetingInDB(){
     $mTitle = $_POST["mtgTitle"];
     // create object
     $tm = new meeting($mDate, $mType, $mTitle);
+    //set all the default values to the ghost value before setting passed in value;
+    $tm->setGhost($_SESSION["MTR-GHOST-ID"]);
     $tm->setMtgHost($_POST["mtgCoordinator"]);
     $tm->setDonations($_POST["mtgDonations"]);
     $tm->setWorshipFac($_POST["mtgWorship"]);
@@ -310,7 +310,7 @@ function updateMeetingInDB(){
     // API to insert meeting
 //     $url = 'http://rogueintel.org/mapi/public/index.php/api/meeting/create/' . $_SESSION["MTR-CLIENT"];
     //$url =  'https://282lcxarb7.execute-api.us-east-1.amazonaws.com/QA/meeting/create/' . $_SESSION["MTR-CLIENT"];
-    $url = "http://rogueintel.org/mapi/public/index.php/api/meeting/update/" . $_SESSION["MTR-CLIENT"] . "&MID=" . $MID;
+    $url = "http://rogueintel.org/mapi/public/index.php/api/meeting/update/" . $_SESSION["MTR-CLIENT"] . "?MID=" . $MID;
     
     $ch = curl_init($url);
     //encode daMtr class
