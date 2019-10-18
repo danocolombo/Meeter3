@@ -265,47 +265,6 @@ $cn->close();
 	    return day > 0 && day <= monthLength[month - 1];
 	}
 			
-	function importedValidation(){
-		// if user is trying to delete system user "Removed User", then echo message that
-		// action is not possible. 
-		//--------------------------------------------------------------------------------
-		var mDate = $("mtgDate").value;
-		alert(mDate);
-		var FName = document.forms["peepForm"]["peepFName"].value;
-		var LName = document.forms["peepForm"]["peepLName"].value;
-		if(FName == "Removed" && LName == "User"){
-			// user is trying to delete system entry. Post warning and abort
-			alert("The entry you are trying to delete is used by the system, and can\'t be removed");
-			return false;
-		}
-		//check if the current user is set to active
-		var aFlag = document.getElementById("peepActive").checked;
-		if(aFlag == true){
-			alert("It is recommended you make the person \'inactive\' rather than deleting.");
-			var x = confirm("Press OK if you want to really delete. All references in the system will be lost");
-			if (x == true){
-				var recordID = getUrlVars()["PID"];
-				var newURL = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
-// 				window.location.href=newURL;
-				$("#mtgForm").submit();
-				return true;	
-			}else{
-				return false;
-			}
-		}
-		var x2 = confirm("Click \'OK\' if you are sure you want to delete this user.");
-		if (x2 == true){
-			var recordID = getUrlVars()["PID"];
-			//alert(recordID);
-			//alert("DELETE");
-			var dest = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
-// 				window.location.href=dest;
-// 				$("#mtgForm").submit();
-		}else{
-			alert("Delete User aborted.");
-			return false;
-		}
-	}
 	function getUrlVars() {
 	    var vars = {};
 	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
