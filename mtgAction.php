@@ -10,7 +10,7 @@ include './vendor/autoload.php';
 require 'vendor/autoload.php';
 include 'meeting.php';
 date_default_timezone_set('UTC');
-use Aws\DynamoDb\Exception\DynamoDbException;
+// use Aws\DynamoDb\Exception\DynamoDbException;
 
 include 'mtgRedirects.php';
 // require 'meeter.php';
@@ -27,6 +27,7 @@ switch ($Action){
         addMeetingToDB();
         exit;
     case "Update":
+        $MID = $_GET['ID'];
         updateMeetingInDB();
         exit;
     case "DeleteGroup":
@@ -262,6 +263,8 @@ function updateMeetingInDB(){
     /*
      * this routine updates an existing record in the database
      */
+    echo "IN updateMeetingInDB function<br/>";
+    $MID = $_GET['ID'];
     
     //load all the form data into a class object
     $mDate = $_POST["mtgDate"];
@@ -300,211 +303,27 @@ function updateMeetingInDB(){
     $tm->setTearDownFac($_POST["mtgTearDown"]);
     $tm->setSecurityFac($_POST["mtgSecurity"]);
     $tm->setNotes($_POST["mtgNotes"]);
+    // ===================================
+    //  SEND UPDATE POST TO MAPI
+    //===================================
     
-    //print_r($tm);
+    // API to insert meeting
+//     $url = 'http://rogueintel.org/mapi/public/index.php/api/meeting/create/' . $_SESSION["MTR-CLIENT"];
+    //$url =  'https://282lcxarb7.execute-api.us-east-1.amazonaws.com/QA/meeting/create/' . $_SESSION["MTR-CLIENT"];
+    $url = "http://rogueintel.org/mapi/public/index.php/api/meeting/update/" . $_SESSION["MTR-CLIENT"] . "&MID=" . $MID;
     
-    /* ---------------------------------------------------------------------
-     * ---------------------------------------------------------------------
-     *   create AWS DynamoDB object and insert/update meeting
-     * ---------------------------------------------------------------------
-     * ---------------------------------------------------------------------
-     */
+    $ch = curl_init($url);
+    //encode daMtr class
+    $jsonDataEncoded = json_encode($tm);
+    //Tell cURL that we want to send a POST reqeust
+    curl_setopt($ch, CURLOPT_POST, 1);
+    //Attach our encoded JSON string to the POST fields
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+    // Set the content type to application/json
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     
-    // this section does a sample update to the mtr.user table.
-    
-    $sdk = new Aws\Sdk([        
-        'region'   => 'us-east-1',
-        'version'  => 'latest',
-        'credentials' => [
-            'key' => $_SESSION["MTR-AWS-KEY"],
-            'secret' => $_SESSION["MTR-AWS-SECRET"],
-        ]
-    ]);
-    $dynamodb = $sdk->createDynamoDb();
-    
-    $tableName = 'mtr.user';
-    echo "# Adding user to table $tableName...\n";
-    
-    $response = $dynamodb->putItem([
-        'TableName' => $tableName,
-        'Item' => [
-            'ID' => ['N' => '6'],
-            'login' => ['S' => 'bubba'],
-            'password' => ['S' => 'admin'],
-            'firstName' => ['S' => 'Bubba'],
-            'lastName' => ['S' => 'Gordy']
-        ],
-        'ReturnConsumedCapacity' => 'TOTAL'
-    ]);
-    
-    echo "Consumed capacity: " . $response ["ConsumedCapacity"] ["CapacityUnits"] . "\n";
-    
-    echo "<br/>DONE<br/>";
-    
-    
-    
-    exit();
-    
-    /* need the following $link command to use the escape_string function */
-    /*
-     * this routine addes the form information to the database
-     */
-    /* need the following $link command to use the escape_string function */
-    
-    //since the add sql statement might be quite large dependind on the application
-    // configuration, we will do it in parts.
-    //-----------------------------------------------------------------------------------------------------
-    // start with required fields, we know we check for mtgDate, mtgType and mtgTitle
-    //-----------------------------------------------------------------------------------------------------
-    $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    // Check connection
-    if ($connection->connect_error) {
-        die("Connection failed: " . $connection->connect_error);
-    }
-    
-    $link = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD)
-    OR die(mysql_error());
-    
-    //we are going to check our values:
-    $mtgDate = $_POST['mtgDate'];
-    $mtgID = $_GET['ID'];
-    $mtgType = $_POST['rdoMtgType'];
-    $mtgTitle = $_POST['mtgTitle'];
-    
-    $mtgFac = $_POST['mtgCoordinator'];
-    $mtgAttendance = $_POST['mtgAttendance'];
-    $mtgDonations = $_POST['mtgDonations'];
-    $mtgWorshipFac = $_POST['mtgWorship'];
-    $mtgAudioVisualFac = $_POST['mtgAV'];
-    $mtgSetupFac = $_POST['mtgSetup'];
-    $mtgTransportationFac = $_POST['mtgTransportation'];
-    $mtgGreeter1Fac = $_POST['mtgGreeter1'];
-    $mtgGreeter2Fac = $_POST['mtgGreeter2'];
-    $mtgResourcesFac = $_POST['mtgResources'];
-    
-    $mtgMenu = $_POST['mtgMenu'];
-    $mtgMealCnt = $_POST['mtgMealCnt'];
-    $mtgMealFac = $_POST['mtgMealFac'];
-    
-    $mtgReader1Fac = $_POST['mtgReader1'];
-    $mtgReader2Fac = $_POST['mtgReader2'];
-    $mtgAnnouncementsFac = $_POST['mtgAnnouncements'];
-    $mtgTeachingFac = $_POST['mtgTeaching'];
-    $mtgChips1Fac = $_POST['mtgChips1'];
-    $mtgChips2Fac = $_POST['mtgChips2'];
-    $mtgNewcomers1Fac = $_POST['mtgNewcomers1'];
-    $mtgNewcomers2Fac = $_POST['mtgNewcomers2'];
-    $mtgSerenityFac = $_POST['mtgSerenity'];
-    
-    $mtgNurseryCnt = $_POST['mtgNursery'];
-    $mtgNurseryFac = $_POST['mtgNurseryFac'];
-    $mtgChildrenCnt = $_POST['mtgChildren'];
-    $mtgChildrenFac = $_POST['mtgChildrenFac'];
-    $mtgYouthCnt = $_POST['mtgYouth'];
-    $mtgYouthFac = $_POST['mtgYouthFac'];
-    
-    $mtgCafeFac = $_POST['mtgCafe'];
-    $mtgTearDownFac = $_POST['mtgTearDown'];
-    $mtgSecurityFac = $_POST['mtgSecurity'];
-    
-    $mtgNotes = $_POST['mtgNotes'];
-    
-    //DEBUG
-    
-    //     echo "\$mtgID: $mtgID<br/>";
-    //     echo "\$mtgDate: " . $mtgDate . "<br/>";
-    //     echo "\$mtgType: $mtgType<br/>";
-    //     echo "\$mtgTitle: $mtgTitle<br/>";
-    //     echo "Greeter1: $mtgGreeter1Fac<br/>";
-    //     echo "Greeter2: $mtgGreeter2Fac<br/>";
-    //     echo "Reader1: $mtgReader1Fac<br/>";
-    //     echo "Reader2: $mtgReader2Fac<br/>";
-    //     echo "Chip1: $mtgChips1Fac<br/>";
-    //     echo "Chip2: $mtgChips2Fac<br/>";
-    //     echo "Newcomer1: $mtgNewcomers1Fac<br/>";
-    //     echo "Newcomer2: $mtgNewcomers2Fac<br/>";
-    //     echo "Menu: >>$mtgMenu<<<br/>";
-    //     exit();
-    //----------------------------------------------------------
-    //now add (update) in sections
-    //----------------------------------------------------------
-    $sql = "UPDATE meetings SET MtgDate = ?, MtgType = ?, MtgTitle = ? WHERE ID = ?";
-    //     echo "\$sql: $sql";
-    //     exit();
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("sssi",
-        date("Y-m-d", strtotime($mtgDate)),
-        $mtgType,
-        $mtgTitle,
-        $mtgID);
-    $stmt->execute();
-    $stmt->close();
-    
-    
-    $sql = "UPDATE meetings SET MtgFac = ?, MtgAttendance = ?, Donations = ?, MtgWorship = ?, AudioVisualFac = ?, ";
-    $sql .= "SetupFac = ?, TransportationFac = ?, Greeter1Fac = ?, Greeter2Fac = ?, ResourcesFac = ? WHERE ID = ?";
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("iidiiiiiiii",
-        $mtgFac,
-        $mtgAttendance,
-        $mtgDonations,
-        $mtgWorshipFac,
-        $mtgAudioVisualFac,
-        $mtgSetupFac,
-        $mtgTransportationFac,
-        $mtgGreeter1Fac,
-        $mtgGreeter2Fac,
-        $mtgResourcesFac,
-        $mtgID);
-    $stmt->execute();
-    $stmt->close();
-    
-    $sql = "UPDATE meetings SET MealCnt = ?, MealFac = ?, Reader1Fac = ?, Reader2Fac = ?, AnnouncementsFac = ?, ";
-    $sql .= "TeachingFac = ?, Chips1Fac = ?, Chips2Fac = ?, SerenityFac = ? WHERE ID = ?";
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("iiiiiiiiii",
-        $mtgMealCnt,
-        $mtgMealFac,
-        $mtgReader1Fac,
-        $mtgReader2Fac,
-        $mtgAnnouncementsFac,
-        $mtgTeachingFac,
-        $mtgChips1Fac,
-        $mtgChips2Fac,
-        $mtgSerenityFac,
-        $mtgID);
-    $stmt->execute();
-    $stmt->close();
-    
-    $sql = "UPDATE meetings SET Newcomers1Fac = ?, Newcomers2Fac = ?, NurseryCnt = ?, NurseryFac = ?, ";
-    $sql .= "ChildrenCnt = ?, ChildrenFac = ?, YouthCnt = ?, YouthFac = ? WHERE ID = ?";
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("iiiiiiiii",
-        $mtgNewcomers1Fac,
-        $mtgNewcomers2Fac,
-        $mtgNurseryCnt,
-        $mtgNurseryFac,
-        $mtgChildrenCnt,
-        $mtgChildrenFac,
-        $mtgYouthCnt,
-        $mtgYouthFac,
-        $mtgID);
-    $stmt->execute();
-    $stmt->close();
-    
-    $sql = "UPDATE meetings SET CafeFac = ?, TearDownFac = ?, SecurityFac = ?, Menu = ?, ";
-    $sql .= "MtgNotes = ? WHERE ID = ?";
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("iiissi",
-        $mtgCafeFac,
-        $mtgTearDownFac,
-        $mtgSecurityFac,
-        $mtgMenu,
-        $mtgNotes,
-        $mtgID);
-    $stmt->execute();
-    $stmt->close();
-    $connection->close();
+    //execute
+    $result = curl_exec($ch);
     
     $dest = "meetings.php";
     //testSQL($sql);
