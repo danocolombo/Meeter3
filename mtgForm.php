@@ -10,10 +10,10 @@ if (! isset($_SESSION["MTR-SESSION-ID"])) {
 // require 'meeter.php';
 
 require 'mtrAOS.php';
-// require 'meeter.php';  //this is used for the config of meeter app for client
+// require 'meeter.php'; //this is used for the config of meeter app for client
 
 // require 'includes/database.inc.php';
-//still need the meeting.inc.php file to parse out the "hosts"...
+// still need the meeting.inc.php file to parse out the "hosts"...
 require 'meeting.inc.php';
 // require 'peopleAOS.php';
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -56,6 +56,7 @@ if (! isset($result)) {
 }
 while ($row = mysqli_fetch_array($result)) {
     $_gid = $row[0];
+    $_SESSION['MTR-GHOST-ID'] = $g_id;
 }
 // need to tidy up before calling next proc
 $result->close();
@@ -130,7 +131,7 @@ if ($MID > 0) {
         $mtgID = $MID;
         $mtgDate = $meeting["MtgDate"];
         $mtgType = $meeting["MtgType"];
-        ;
+
         $mtgTitle = $meeting["MtgTitle"];
         $mtgFac = $meeting["MtgFac"];
         $mtgAttendance = $meeting["MtgAttendance"];
@@ -178,17 +179,22 @@ $aosConfig->loadConfigFromDB();
 
 // =======================================
 // load the areas of service into temp table for use in dropdowns
-//=======================================
+// =======================================
 $cn = mysqli_connect($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
 $proc = "Call " . $_SESSION["MTR-CLIENT"] . ".Load_Commit_Table";
 $result = mysqli_query($cn, $proc) or die("Stored proc[Load_Commit_Table]: fail:" . mysqli_error());
 $result = null;
 $cn->close();
 
-
 // #############################################
 // END OF PRE-CONDITIONING
 // #############################################
+//   _____ _______       _____ _______   ____   ____  _______     __
+//  / ____|__   __|/\   |  __ \__   __| |  _ \ / __ \|  __ \ \   / /
+// | (___    | |  /  \  | |__) | | |    | |_) | |  | | |  | \ \_/ /
+//  \___ \   | | / /\ \ |  _  /  | |    |  _ <| |  | | |  | |\   /
+//  ____) |  | |/ ____ \| | \ \  | |    | |_) | |__| | |__| | | |
+// |_____/   |_/_/    \_\_|  \_\ |_|    |____/ \____/|_____/  |_|
 
 ?>
 <!DOCTYPE HTML>
@@ -331,47 +337,47 @@ $cn->close();
 			    return day > 0 && day <= monthLength[month - 1];
 			}
 			
-			function importedValidation(){
-				// if user is trying to delete system user "Removed User", then echo message that
-				// action is not possible. 
-				//--------------------------------------------------------------------------------
-				var mDate = $("mtgDate").value;
-				alert(mDate);
-				var FName = document.forms["peepForm"]["peepFName"].value;
-				var LName = document.forms["peepForm"]["peepLName"].value;
-				if(FName == "Removed" && LName == "User"){
-					// user is trying to delete system entry. Post warning and abort
-					alert("The entry you are trying to delete is used by the system, and can\'t be removed");
-					return false;
-				}
-				//check if the current user is set to active
-				var aFlag = document.getElementById("peepActive").checked;
-				if(aFlag == true){
-					alert("It is recommended you make the person \'inactive\' rather than deleting.");
-					var x = confirm("Press OK if you want to really delete. All references in the system will be lost");
-					if (x == true){
-						var recordID = getUrlVars()["PID"];
-						var newURL = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
-// 						window.location.href=newURL;
-						$("#mtgForm").submit();
-						return true;	
-					}else{
-						return false;
-					}
-				}
-				var x2 = confirm("Click \'OK\' if you are sure you want to delete this user.");
-				if (x2 == true){
-					var recordID = getUrlVars()["PID"];
-					//alert(recordID);
-					//alert("DELETE");
-					var dest = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
-// 					window.location.href=dest;
-// 					$("#mtgForm").submit();
-				}else{
-					alert("Delete User aborted.");
-					return false;
-				}
-			}
+// 			function importedValidation(){
+// 				// if user is trying to delete system user "Removed User", then echo message that
+// 				// action is not possible. 
+// 				//--------------------------------------------------------------------------------
+// 				var mDate = $("mtgDate").value;
+// 				alert(mDate);
+// 				var FName = document.forms["peepForm"]["peepFName"].value;
+// 				var LName = document.forms["peepForm"]["peepLName"].value;
+// 				if(FName == "Removed" && LName == "User"){
+// 					// user is trying to delete system entry. Post warning and abort
+// 					alert("The entry you are trying to delete is used by the system, and can\'t be removed");
+// 					return false;
+// 				}
+// 				//check if the current user is set to active
+// 				var aFlag = document.getElementById("peepActive").checked;
+// 				if(aFlag == true){
+// 					alert("It is recommended you make the person \'inactive\' rather than deleting.");
+// 					var x = confirm("Press OK if you want to really delete. All references in the system will be lost");
+// 					if (x == true){
+// 						var recordID = getUrlVars()["PID"];
+// 						var newURL = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
+// // 						window.location.href=newURL;
+// 						$("#mtgForm").submit();
+// 						return true;	
+// 					}else{
+// 						return false;
+// 					}
+// 				}
+// 				var x2 = confirm("Click \'OK\' if you are sure you want to delete this user.");
+// 				if (x2 == true){
+// 					var recordID = getUrlVars()["PID"];
+// 					//alert(recordID);
+// 					//alert("DELETE");
+// 					var dest = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
+// // 					window.location.href=dest;
+// // 					$("#mtgForm").submit();
+// 				}else{
+// 					alert("Delete User aborted.");
+// 					return false;
+// 				}
+// 			}
 			function getUrlVars() {
 			    var vars = {};
 			    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -516,9 +522,9 @@ if ($edit) {
                 if ($aosConfig->getConfig("donations") == "true") {
                     echo "<tr>";
                     echo "<td><div class=\"mtgLabels\" style=\"float:right\">Donations:</div></td>";
-                    if(isset($mtgDonations)){
+                    if (isset($mtgDonations)) {
                         $dvalue = $mtgDonations;
-                    }else {
+                    } else {
                         $dvalue = 0;
                     }
                     echo "<td><input id=\"mtgDonations\" name=\"mtgDonations\" size=\"6\" type=\"text\" value=\"" . $dvalue . "\"/></td>";
@@ -530,10 +536,10 @@ if ($edit) {
                     // ================================
                     echo "<tr><td><div class=\"mtgLabels\" style=\"float:right\">" . $aosConfig->getDisplayString("worship") . ":</div></td>";
                     echo "<td><select id=\"mtgWorship\" name=\"mtgWorship\">";
-                    
-                    //call function in meeting.in.php to get the people for service.
+
+                    // call function in meeting.in.php to get the people for service.
                     $option = getPeepsForService("worship");
-                    
+
                     foreach ($option as $id => $name) {
                         if ($mtgWorship == $id) {
                             echo "<option value=\"$id\" SELECTED>$name</option>";
@@ -558,9 +564,9 @@ if ($edit) {
                         echo "<option value=\"$_gid\" SELECTED>$_glabel</option>";
                     }
                     echo "</select>";
-//                     echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
-//                     echo "<tr><td colspan=2>";
-//                     print_r($option);
+                    // echo "<a href=\"#\" title=\"People on Worship team\"><img style=\"width:15px;height:15px;\" src=\"images/toolTipQM.png\" alt=\"( &#x26A0; )\"/></a></td></tr>";
+                    // echo "<tr><td colspan=2>";
+                    // print_r($option);
                     echo "</td></tr>";
                 }
                 if ($aosConfig->getConfig("av") == "true") {
@@ -1249,7 +1255,7 @@ if ($edit) {
 						<fieldset>
 							<legend>Notes and Comments</legend>
                               	<?php
-                            if (isset($mtgNotes) ) {
+                            if (isset($mtgNotes)) {
                                 echo "<textarea id=\"mtgNotes\" name=\"mtgNotes\" rows=\"5\" cols=\"80\">" . $mtgNotes . "</textarea>";
                             } else {
                                 echo "<textarea id=\"mtgNotes\" name=\"mtgNotes\"  rows=\"5\" cols=\"80\"></textarea>";
@@ -1274,8 +1280,7 @@ if ($edit) {
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button
 							style="font-family: tahoma; font-size: 12pt; color: white; background: green; padding: 5px 15px 5px 15px; border-radius: 10px; background-image: linear-gradient(to bottom right, #cc0000, #ff3300);"
-							type="button" onclick="cancelMtgForm()">CANCEL</button> <br />
-					<br /></td>
+							type="button" onclick="cancelMtgForm()">CANCEL</button> <br /> <br /></td>
 				</tr>
 
 			</table>

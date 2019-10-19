@@ -6,13 +6,13 @@ if(!isset($_SESSION["MTR-SESSION-ID"])){
     header('Location: login.php');
     exit();
 }
-include 'meeter.php';
+// include 'meeter.php';
 include 'peopleAOS.php';
 include 'mtrAOS.php';
 include 'people.inc.php';
 
-global $person;
-$person = new MeeterPeep();     //meeter.php
+//global $person;
+//$person = new MeeterPeep();     //meeter.php
 //header("Content-Type: application/json");
 header("Expires: 0");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -60,22 +60,37 @@ $PID = $_GET["PID"];
 /******************************************************************
  * new meeter header
  ***************************************************************** */
+
+//   _____ _______       _____ _______   ____   ____  _______     __
+//  / ____|__   __|/\   |  __ \__   __| |  _ \ / __ \|  __ \ \   / /
+// | (___    | |  /  \  | |__) | | |    | |_) | |  | | |  | \ \_/ /
+//  \___ \   | | / /\ \ |  _  /  | |    |  _ <| |  | | |  | |\   /
+//  ____) |  | |/ ____ \| | \ \  | |    | |_) | |__| | |__| | | |
+// |_____/   |_/_/    \_\_|  \_\ |_|    |____/ \____/|_____/  |_|
+
+
 ?>
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1" />
-		<title>Meeter Web Application</title>
-        <link rel="stylesheet" type="text/css" href="css/screen_styles.css" />
-        <link rel="stylesheet" type="text/css" href="css/screen_layout_large.css" />
-        <link rel="stylesheet" type="text/css" media="only screen and (min-width:50px) and (max-width:500px)"   href="css/screen_layout_small.css">
-        <link rel="stylesheet" type="text/css" media="only screen and (min-width:501px) and (max-width:800px)"  href="css/screen_layout_medium.css">
-        <!--[if lt IE 9]>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1" />
+<title>Meeter Web Application</title>
+<link rel="stylesheet" type="text/css" href="css/screen_styles.css" />
+<link rel="stylesheet" type="text/css"
+	href="css/screen_layout_large.css" />
+<link rel="stylesheet" type="text/css"
+	media="only screen and (min-width:50px) and (max-width:500px)"
+	href="css/screen_layout_small.css">
+<link rel="stylesheet" type="text/css"
+	media="only screen and (min-width:501px) and (max-width:800px)"
+	href="css/screen_layout_medium.css">
+<!--[if lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script type="text/javascript">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript">
 			function validateForm(){
 				var x = document.forms["peepForm"]["peepFName"].value;
 				if (x == ""){
@@ -144,43 +159,7 @@ $PID = $_GET["PID"];
 				window.location.href='people.php';
 						return true;
 			}
-			function validateDeleteUser(){
-				// if user is trying to delete system user "Removed User", then echo message that
-				// action is not possible. 
-				//--------------------------------------------------------------------------------
-				var FName = document.forms["peepForm"]["peepFName"].value;
-				var LName = document.forms["peepForm"]["peepLName"].value;
-				if(FName == "Removed" && LName == "User"){
-					// user is trying to delete system entry. Post warning and abort
-					alert("The entry you are trying to delete is used by the system, and can\'t be removed");
-					return false;
-				}
-				//check if the current user is set to active
-				var aFlag = document.getElementById("peepActive").checked;
-				if(aFlag == true){
-					alert("It is recommended you make the person \'inactive\' rather than deleting.");
-					var x = confirm("Press OK if you want to really delete. All references in the system will be lost");
-					if (x == true){
-						var recordID = getUrlVars()["PID"];
-						var newURL = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
-						window.location.href=newURL;
-						return true;	
-					}else{
-						return false;
-					}
-				}
-				var x2 = confirm("Click \'OK\' if you are sure you want to delete this user.");
-				if (x2 == true){
-					var recordID = getUrlVars()["PID"];
-					//alert(recordID);
-					//alert("DELETE");
-					var dest = "peepDelete.php?Action=DeletePeep&PID=" + recordID;
-					window.location.href=dest;
-				}else{
-					alert("Delete User aborted.");
-					return false;
-				}
-			}
+			
 			function getUrlVars() {
 			    var vars = {};
 			    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -189,17 +168,26 @@ $PID = $_GET["PID"];
 			    return vars;
 			}
         </script>
-    </head> 
-    <body>
-		<div class="page">
-			<header>
-				<a class="logo" title="home" href="index.php"><span></span></a>
-			</header>
-			<div id="navBar"></div>
-		<script>
-			$( "#navBar" ).load( "navbar.php" );
-		</script>
-			<article>
+</head>
+<body>
+	<div class="page">
+		<header>
+			<div id="hero"></div>
+			<a class="logo" title="home" href="index.php"><span></span></a>
+		</header>
+		<div id="navBar">
+			<script>
+                        <?php
+                        if ($_SESSION["MTR-ADMIN-FLAG"] == "1") {
+                            echo "$( \"#navBar\" ).load( \"navbarA.php\" );";
+                        } else {
+                            echo "$( \"#navBar\" ).load( \"navbar.php\" );";
+                        }
+                        ?>
+
+                     </script>
+		</div>
+		<article>
 <?php 
     /**********************************
      * finish generic header above
@@ -272,11 +260,9 @@ switch ("$Action"){
  ***********************************************/
 ?>
 	</article>
-	<footer>
-		&copy; 2013-2018 Rogue Intelligence
-	</footer>
-</div>
-        <script src="js/meeter.js"></script>
+		<footer> &copy; 2013-2020 Rogue Intelligence </footer>
+	</div>
+	<script src="js/meeter.js"></script>
 </body>
 </html>
 
@@ -439,9 +425,24 @@ function showForm($action, $origin, $destination, $ID){
             break; 
     }
     //loads the user information, if $PID is provide
-    global $person;
+    //  USE MAPI TO GET USER INFO
+//     global $person;
     if(isset($PID)){
-        $person->getPerson($PID);
+        //--------------
+        $client = $_SESSION["MTR-CLIENT"];
+        $mapi = "http://rogueintel.org/mapi/public/index.php/api/people/get/" . $client . "?PID=" . $PID;
+        
+        $data = file_get_contents($mapi);
+        $peepArray = json_decode($data, true);
+        if (sizeof($peepArray) < 1) {
+            echo "People record not found, contact your administrator<br/>";
+            echo "people.showForm trying to get \$PID= $PID";
+            exit();
+        }
+        $person = $peepArray[0];
+        
+        
+//         $person->getPerson($PID);
     }
     //loads the system configuration
     global $sAOS;
