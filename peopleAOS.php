@@ -156,6 +156,9 @@ class pConfig{
         }
         
     }
+    public function refineAOS($PID){
+        /
+    }
 
     public function saveConfigToDB($PID){
         $newConfig = "";

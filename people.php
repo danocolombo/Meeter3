@@ -441,6 +441,7 @@ function showForm($action, $origin, $destination, $ID){
         
         $data = file_get_contents($mapi);
         $peepArray = json_decode($data, true);
+        
         if (sizeof($peepArray) < 1) {
             echo "People record not found, contact your administrator<br/>";
             echo "people.showForm trying to get \$PID= $PID";
