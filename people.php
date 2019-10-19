@@ -32,11 +32,13 @@ header("Pragma: no-cache");
  * $page = new Page();
  * print $page->getTop();
  *******************************************/
-$Action = $_GET["Action"];
-$Destination = $_GET["Destination"];
-$Origin = $_GET["Origin"];
-$ID = $_GET["ID"];
-$PID = $_GET["PID"];
+if(isset($_GET["ACTION"])){
+    $Action = $_GET["Action"];
+}
+// $Destination = $_GET["Destination"];
+// $Origin = $_GET["Origin"];
+// $ID = $_GET["ID"];
+// $PID = $_GET["PID"];
 /*************************************************
  * if new or edit a person we need the following
  * loaded for use. It is up here because we need
@@ -196,12 +198,17 @@ $PID = $_GET["PID"];
  * START MAIN PROCESSING
  * ###################################################
  */
-
-
+$Action = "";
+if(isset($_GET["Action"])){
+   $Action = $_GET["Action"];
+}
+if(isset($_GET["PID"])){
+    $PID = $_GET["PID"];
+}
 
 switch ("$Action"){     
     case "Edit":
-        showForm("Edit","","", $ID);
+        showForm("Edit","","", $PID);
         break;
     case "TraineeList":
         $TID = $_GET["TID"];
