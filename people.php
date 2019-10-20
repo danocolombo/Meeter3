@@ -448,9 +448,6 @@ function showForm($action, $origin, $destination, $ID){
             exit();
         }
         $person = $peepArray[0];
-        
-        
-//         $person->getPerson($PID);
     }
     //loads the system configuration
     global $sAOS;
@@ -460,6 +457,8 @@ function showForm($action, $origin, $destination, $ID){
     global $peepAOS;
     $peepAOS= new pConfig();
     $peepAOS->loadDisplayAOS($PID);
+
+    
     echo "<form id='peepForm' action='" . $dest . "' method='post'>";
     echo "<center><h2>CR Personnel Form</h2></center>";
     echo "<center>";
@@ -484,6 +483,11 @@ function showForm($action, $origin, $destination, $ID){
     echo "<tr><td align='right'>Joy Areas:</td><td><textarea id='peepJoyAreas' name='peepJoyAreas' cols='40' rows='4'>" . htmlspecialchars($person->getJoyAreas(),ENT_QUOTES) . "</textarea></td></tr>";
     echo "<tr><td align='right'>Reasons To Serve:</td><td><textarea peepReasonsToServe' name='peepReasonsToServe' cols='40' rows='5'>" . htmlspecialchars($person->getReasonsToServe(),ENT_QUOTES) . "</textarea></td></tr>";
     echo "</table>";
+    
+    
+    echo "WE MADE IT HERE";
+    exit;
+    
     echo "<table border='0'><tr><td colspan='3'></td></tr>";   // opens the section
     echo "<tr><td valign='top'><table border='3'><tr><td>";             // border around interests
     /* ############################################

@@ -160,33 +160,33 @@
         $connection->close();
         return $returnValue;
     }
-    function getGhostLabel(){
-        $returnValue = 0;
-        mysqli_report(MYSQLI_REPORT_STRICT);
+//     function getGhostLabel(){
+//         $returnValue = 0;
+//         mysqli_report(MYSQLI_REPORT_STRICT);
         
-//         define('DB_HOST', 'localhost');
-//         define('DB_USER', 'dcolombo_muat');
-//         define('DB_PASSWORD', 'MR0mans1212!');
-//         define('DB_NAME', 'dcolombo_muat');
+// //         define('DB_HOST', 'localhost');
+// //         define('DB_USER', 'dcolombo_muat');
+// //         define('DB_PASSWORD', 'MR0mans1212!');
+// //         define('DB_NAME', 'dcolombo_muat');
+// //         $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        
+//         // Check connection
 //         $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-        
-        // Check connection
-        $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-        if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
-        }
-        $config = "GhostLabel";
-        $query = $connection->prepare("SELECT Setting FROM Meeter WHERE Config = ?");
-        $query->bind_param("s", $config);
-        $query->execute();
-        $query->bind_result($Setting);
-        while($query->fetch()){
-            $returnValue = $Setting;
-        }
-        $query->close();
-        $connection->close();
-        return $returnValue;
-    }
+//         if ($connection->connect_error) {
+//             die("Connection failed: " . $connection->connect_error);
+//         }
+//         $config = "GhostLabel";
+//         $query = $connection->prepare("SELECT Setting FROM Meeter WHERE Config = ?");
+//         $query->bind_param("s", $config);
+//         $query->execute();
+//         $query->bind_result($Setting);
+//         while($query->fetch()){
+//             $returnValue = $Setting;
+//         }
+//         $query->close();
+//         $connection->close();
+//         return $returnValue;
+//     }
 //     function getGhostInfo(){
 //         /* ===========================================================
 //          * this function gets the Nobody, N/A value from the people 

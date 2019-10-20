@@ -208,6 +208,10 @@ $PID = $_GET["PID"];
 
 switch ("$Action"){     
     case "Edit":
+        
+        echo "MADE IT HERE";
+        exit;
+        
         showForm("Edit","","", $ID);
         break;
     case "TraineeList":
@@ -433,6 +437,7 @@ function showForm($action, $origin, $destination, $ID){
             $dest = "people.php";
             break; 
     }
+  
     //loads the user information, if $PID is provide
     global $person;
     if(isset($PID)){
@@ -446,6 +451,8 @@ function showForm($action, $origin, $destination, $ID){
     global $peepAOS;
     $peepAOS= new pConfig();
     $peepAOS->loadDisplayAOS($PID);
+
+    
     echo "<form id='peepForm' action='" . $dest . "' method='post'>";
     echo "<center><h2>CR Personnel Form</h2></center>";
     echo "<center>";

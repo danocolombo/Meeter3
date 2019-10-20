@@ -23,7 +23,6 @@ if(!isset($_SESSION["MTR-SESSION-ID"])){
 
 class mConfig{
     public $AOS = array();      //system values
-    public $peepAOS = array();  //user values
     public $ghostID;            //ID for the artificial person
     public $ghostLabel;         // the name to use for the ghost
     
@@ -35,18 +34,18 @@ class mConfig{
 //             return false;
 //         }
 //     }
-    public function setGhostID($i){
-        $this->ghostID = $i;
-    }
-    public function getGhostID(){
-        return $this->ghostID;
-    }
-    public function setGhostLabel($l){
-        $this->ghostLabel = $l;
-    }
-    public function getGhostLabel(){
-        return $this->ghostLabel;
-    }
+//     public function setGhostID($i){
+//         $this->ghostID = $i;
+//     }
+//     public function getGhostID(){
+//         return $this->ghostID;
+//     }
+//     public function setGhostLabel($l){
+//         $this->ghostLabel = $l;
+//     }
+//     public function getGhostLabel(){
+//         return $this->ghostLabel;
+//     }
     public function showConfig(){
         foreach($this->AOS as $key => $value){
             echo "$value : $value<br/>";

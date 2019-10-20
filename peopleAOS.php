@@ -77,12 +77,12 @@ class pConfig{
         
         mysqli_report(MYSQLI_REPORT_STRICT);
         
-        define('DB_HOST', 'localhost');
-        define('DB_USER', 'dcolombo_muat');
-        define('DB_PASSWORD', 'MR0mans1212!');
-        define('DB_NAME', 'dcolombo_muat');
-        $mysqli = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-        $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+//         define('DB_HOST', 'localhost');
+//         define('DB_USER', 'dcolombo_muat');
+//         define('DB_PASSWORD', 'MR0mans1212!');
+//         define('DB_NAME', 'dcolombo_muat');
+        $connection = new mysqli($_SESSION["MTR-H"],$_SESSION["MTR-U"],$_SESSION["MTR-P"],$_SESSION["MTR-N"]);
+//         $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         
         // Check connection
         if ($connection->connect_error) {
@@ -120,12 +120,13 @@ class pConfig{
         
         mysqli_report(MYSQLI_REPORT_STRICT);
         
-        define('DB_HOST', 'localhost');
-        define('DB_USER', 'dcolombo_muat');
-        define('DB_PASSWORD', 'MR0mans1212!');
-        define('DB_NAME', 'dcolombo_muat');
-        $mysqli = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-        $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+//         define('DB_HOST', 'localhost');
+//         define('DB_USER', 'dcolombo_muat');
+//         define('DB_PASSWORD', 'MR0mans1212!');
+//         define('DB_NAME', 'dcolombo_muat');
+//         $mysqli = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+        require_once ('auth/database.php');
+        $connection = new mysqli($_SESSION["MTR-H"],$_SESSION["MTR-U"],$_SESSION["MTR-P"],$_SESSION["MTR-N"]);
         
         // Check connection
         if ($connection->connect_error) {
@@ -156,9 +157,8 @@ class pConfig{
         }
         
     }
-    public function refineAOS($PID){
-        /
-    }
+//     public function refineAOS($PID){
+//     }
 
     public function saveConfigToDB($PID){
         $newConfig = "";
@@ -167,11 +167,12 @@ class pConfig{
         }
         $newConfig = chop($newConfig,"|");
         try {
-            define('DB_HOST', 'localhost');
-            define('DB_USER', 'dcolombo_muat');
-            define('DB_PASSWORD', 'MR0mans1212!');
-            define('DB_NAME', 'dcolombo_muat');
-            $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+//             define('DB_HOST', 'localhost');
+//             define('DB_USER', 'dcolombo_muat');
+//             define('DB_PASSWORD', 'MR0mans1212!');
+//             define('DB_NAME', 'dcolombo_muat');
+            require_once ('auth/database.php');
+            $connection = new mysqli($_SESSION["MTR-H"], $_SESSION["MTR-U"], $_SESSION["MTR-P"], $_SESSION["MTR-N"]);
             // Check connection
             if ($connection->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
