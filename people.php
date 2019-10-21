@@ -158,7 +158,7 @@ if(isset($_GET["ACTION"])){
 			
 			function ExitPeopleForm(){
 				// lets go back to the people list
-				window.location.href='people.php';
+				window.location.href='peopleList.php';
 						return true;
 			}
 			
@@ -281,7 +281,41 @@ switch ("$Action"){
  * functions for processing below
 *************************************************/
 function showPeopleList() {
-   include 'auth/database.php';
+   //------------------------------
+    // dislay list of active personnel for client$client = $_SESSION["MTR-CLIENT"];
+    $listUrl = "http://rogueintel.org/mapi/public/index.php/api/people/getActivePersonnelList/" . $client;
+    
+    $data = file_get_contents($listUrl);
+    $listArray = json_decode($data, true);
+    if (sizeof($listArray) < 1) {
+        echo "No personnel found, contact your administrator";
+        exit();
+    }
+    echo "<div style='text-align:right; padding-right: 20px;'><a href='people.php?Action=ShowAll'><img src='images/btnShowAll.gif'/></a></div>";
+    echo "<table>";
+    foreach($listArray as $person){
+        echo "<tr><td>";
+        echo "<a href='people.php?Action=Edit&PID=" . $person->ID . "'><img src='images/btnEdit.gif'></img></a></td>";
+        echo "<td>&nbsp;" . $person->FName . " " . $person->LName . "</td></tr>";
+    }
+    echo "</table>";
+    
+//     while(list($ID, $FName, $LName) = $result->fetch_row()){
+//         echo "<tr><td>";
+//         echo "<a href='people.php?Action=Edit&PID=" . $ID . "'><img src='images/btnEdit.gif'></img></a></td>";
+//         echo "<td>&nbsp;" . $FName . " " . $LName . "</td></tr>";
+//     }
+//     echo "</table>";
+    
+//     $meeting = $meetingArray[0];
+    
+    
+    
+    
+    
+    
+    
+    include 'auth/database.php';
    echo "<center><h1>CR Personnel</h1>";
 
    if($connection->errno > 0){
@@ -449,11 +483,14 @@ function showForm($action, $origin, $destination, $ID){
         }
         $person = $peepArray[0];
     }
+    
     //loads the system configuration
     global $sAOS;
     $sAOS = new mConfig();
     $sAOS->loadConfigFromDB();
+  
     
+    // get Area of Service for a person
     global $peepAOS;
     $peepAOS= new pConfig();
     $peepAOS->loadDisplayAOS($PID);
@@ -463,30 +500,29 @@ function showForm($action, $origin, $destination, $ID){
     echo "<center><h2>CR Personnel Form</h2></center>";
     echo "<center>";
     echo "<table border='0'>";
-    echo "<tr><td align='right'>First Name:</td><td><input type='text' id='peepFName' name='peepFName' size='15' value='" . htmlspecialchars($person->getFName(),ENT_QUOTES) . "'/></td></tr>";
-    echo "<tr><td align='right'>Last Name:</td><td><input type='text' id='peepLName' name='peepLName' size='15' value='" . htmlspecialchars($person->getLName(),ENT_QUOTES) . "'/></td></tr>";     
-    echo "<tr><td align='right'>Address:</td><td><input type='text' id='peepAddress' name='peepAddress' size='25' value='" . htmlspecialchars($person->getStreet(),ENT_QUOTES) . "'/></td></tr>";     
-    echo "<tr><td align='right'>City:</td><td><input type='text' id='peepCity' name='peepCity' size='15' value='" . htmlspecialchars($person->getCity(),ENT_QUOTES) . "'/> ";
-    echo "<tr><td align='right'>State:</td><td><input type='text' id='peepState' name='peepState' size='2' value='" . htmlspecialchars($person->getState(),ENT_QUOTES) . "'/>";     
-    echo "<tr><td align='right'>Zipcode:</td><td><input type='text' id='peepZipcode' name='peepZipcode' size='25' value='" . htmlspecialchars($person->getPostalCode(),ENT_QUOTES) . "'/></td></tr>";       
-    echo "<tr><td align='right'>Phone 1:</td><td><input type='text' id='peepPhone1' name='peepPhone1' size='15' value='"  . htmlspecialchars($person->getPhone1(),ENT_QUOTES) . "'/></td></tr>";
-    echo "<tr><td align='right'>Phone 2:</td><td><input type='text' id='peepPhone2' name='peepPhone2' size='15' value='"  . htmlspecialchars($person->getPhone2(),ENT_QUOTES) . "'/></td></tr>";
-    echo "<tr><td align='right'>Email 1:</td><td><input type='text' id=peepEmail1' name='peepEmail1' size='40' value='"  . htmlspecialchars($person->getEmail1(),ENT_QUOTES) . "'/></td></tr>";
-    echo "<tr><td align='right'>Email 2:</td><td><input type='text' id='peepEmail2' name='peepEmail2' size='40' value='"  . htmlspecialchars($person->getEmail2(),ENT_QUOTES) . "'/></td></tr>";
+    echo "<tr><td align='right'>First Name:</td><td><input type='text' id='peepFName' name='peepFName' size='15' value='" . htmlspecialchars($person["FName"],ENT_QUOTES) . "'/></td></tr>";
+    echo "<tr><td align='right'>Last Name:</td><td><input type='text' id='peepLName' name='peepLName' size='15' value='" . htmlspecialchars($person["LName"],ENT_QUOTES) . "'/></td></tr>";     
+    echo "<tr><td align='right'>Address:</td><td><input type='text' id='peepAddress' name='peepAddress' size='25' value='" . htmlspecialchars($person["Address"],ENT_QUOTES) . "'/></td></tr>";     
+    echo "<tr><td align='right'>City:</td><td><input type='text' id='peepCity' name='peepCity' size='15' value='" . htmlspecialchars($person["City"],ENT_QUOTES) . "'/> ";
+    echo "<tr><td align='right'>State:</td><td><input type='text' id='peepState' name='peepState' size='2' value='" . htmlspecialchars($person["State"],ENT_QUOTES) . "'/>";     
+    echo "<tr><td align='right'>Zipcode:</td><td><input type='text' id='peepZipcode' name='peepZipcode' size='25' value='" . htmlspecialchars($person["Zipcode"],ENT_QUOTES) . "'/></td></tr>";       
+    echo "<tr><td align='right'>Phone 1:</td><td><input type='text' id='peepPhone1' name='peepPhone1' size='15' value='"  . htmlspecialchars($person["Phone1"],ENT_QUOTES) . "'/></td></tr>";
+    echo "<tr><td align='right'>Phone 2:</td><td><input type='text' id='peepPhone2' name='peepPhone2' size='15' value='"  . htmlspecialchars($person["Phone2"],ENT_QUOTES) . "'/></td></tr>";
+    echo "<tr><td align='right'>Email 1:</td><td><input type='text' id=peepEmail1' name='peepEmail1' size='40' value='"  . htmlspecialchars($person["Email1"],ENT_QUOTES) . "'/></td></tr>";
+    echo "<tr><td align='right'>Email 2:</td><td><input type='text' id='peepEmail2' name='peepEmail2' size='40' value='"  . htmlspecialchars($person["Email2"],ENT_QUOTES) . "'/></td></tr>";
     
-    echo "<tr><td align='right'>Spiritual Gifts:</td><td><textarea id='peepSpiritualGifts' name='peepSpiritualGifts' cols='40' rows='2'>" . htmlspecialchars($person->getSpiritualGifts(),ENT_QUOTES) . "</textarea></td></tr>";
-    echo "<tr><td align='right'>Recovery Area:</td><td><textarea id='peepRecoveryArea' name='peepRecoveryArea' cols='40' rows='2'>" . htmlspecialchars($person->getRecoveryArea(),ENT_QUOTES) . "</textarea></td></tr>";
-    echo "<tr><td align='right'>Recovery Since:</td><td><input type='text' id='peepRecoverySince' name='peepRecoverySince' size='15' value='" . htmlspecialchars($person->getRecoverySince(),ENT_QUOTES) . "'/></td></tr>";
-    echo "<tr><td align='right'>CR Since:&nbsp;</td><td><input type='text' id='peepCRSince' name='peepCRSince' size='15' value='" . htmlspecialchars($person->getCrSince(),ENT_QUOTES) . "'/></td></tr>";
-    echo "<tr><td align='right'>Covenant Date:&nbsp;</td><td><input type='text' name='peepCovenant' size='15' value='" . htmlspecialchars($person->getCovenantDate(),ENT_QUOTES) . "'/></td></tr>";
-    echo "<tr><td align='right'>Areas Served:</td><td><textarea id='peepAreasServed' name='peepAreasServed' cols='40' rows='4'>" . htmlspecialchars($person->getAreasServed(),ENT_QUOTES) . "</textarea></td></tr>";
-    echo "<tr><td align='right'>Joy Areas:</td><td><textarea id='peepJoyAreas' name='peepJoyAreas' cols='40' rows='4'>" . htmlspecialchars($person->getJoyAreas(),ENT_QUOTES) . "</textarea></td></tr>";
-    echo "<tr><td align='right'>Reasons To Serve:</td><td><textarea peepReasonsToServe' name='peepReasonsToServe' cols='40' rows='5'>" . htmlspecialchars($person->getReasonsToServe(),ENT_QUOTES) . "</textarea></td></tr>";
+    echo "<tr><td align='right'>Spiritual Gifts:</td><td><textarea id='peepSpiritualGifts' name='peepSpiritualGifts' cols='40' rows='2'>" . htmlspecialchars($person["SpiritualGifts"],ENT_QUOTES) . "</textarea></td></tr>";
+    echo "<tr><td align='right'>Recovery Area:</td><td><textarea id='peepRecoveryArea' name='peepRecoveryArea' cols='40' rows='2'>" . htmlspecialchars($person["RecoveryArea"],ENT_QUOTES) . "</textarea></td></tr>";
+    echo "<tr><td align='right'>Recovery Since:</td><td><input type='text' id='peepRecoverySince' name='peepRecoverySince' size='15' value='" . htmlspecialchars($person["RecoverySince"],ENT_QUOTES) . "'/></td></tr>";
+    echo "<tr><td align='right'>CR Since:&nbsp;</td><td><input type='text' id='peepCRSince' name='peepCRSince' size='15' value='" . htmlspecialchars($person["CRSince"],ENT_QUOTES) . "'/></td></tr>";
+    echo "<tr><td align='right'>Covenant Date:&nbsp;</td><td><input type='text' name='peepCovenant' size='15' value='" . htmlspecialchars($person["Covenant"],ENT_QUOTES) . "'/></td></tr>";
+    echo "<tr><td align='right'>Areas Served:</td><td><textarea id='peepAreasServed' name='peepAreasServed' cols='40' rows='4'>" . htmlspecialchars($person["AreasServed"],ENT_QUOTES) . "</textarea></td></tr>";
+    echo "<tr><td align='right'>Joy Areas:</td><td><textarea id='peepJoyAreas' name='peepJoyAreas' cols='40' rows='4'>" . htmlspecialchars($person["JoyAreas"],ENT_QUOTES) . "</textarea></td></tr>";
+    echo "<tr><td align='right'>Reasons To Serve:</td><td><textarea peepReasonsToServe' name='peepReasonsToServe' cols='40' rows='5'>" . htmlspecialchars($person["ReasonsToServe"],ENT_QUOTES) . "</textarea></td></tr>";
     echo "</table>";
     
     
-    echo "WE MADE IT HERE";
-    exit;
+ 
     
     echo "<table border='0'><tr><td colspan='3'></td></tr>";   // opens the section
     echo "<tr><td valign='top'><table border='3'><tr><td>";             // border around interests
@@ -573,8 +609,8 @@ function showForm($action, $origin, $destination, $ID){
     echo "</td></tr></table>";           //closes the section table
     
     echo "<br/><table>"; //new table at bottom for notes
-    echo "<tr><td align='right'>Notes:</td><td><textarea id='peepNotes' name='peepNotes' cols='40' rows='5'>" . htmlspecialchars($person->getNotes(),ENT_QUOTES) . "</textarea></td></tr>";
-    if ($person->getActive()=="1"){
+    echo "<tr><td align='right'>Notes:</td><td><textarea id='peepNotes' name='peepNotes' cols='40' rows='5'>" . htmlspecialchars($person["Notes"],ENT_QUOTES) . "</textarea></td></tr>";
+    if ($person["Active"]=="1"){
         echo "<tr><td align=\"right\">Active:</td><td><input type=\"checkbox\" id=\"peepActive\" name=\"peepActive\" checked></td></tr>";
     }else{
         echo "<tr><td align=\"right\">Active:</td><td><input type=\"checkbox\" id=\"peepActive\" name=\"peepActive\"></td></tr>";

@@ -81,30 +81,42 @@ class pConfig{
 //         define('DB_USER', 'dcolombo_muat');
 //         define('DB_PASSWORD', 'MR0mans1212!');
 //         define('DB_NAME', 'dcolombo_muat');
-        $connection = new mysqli($_SESSION["MTR-H"],$_SESSION["MTR-U"],$_SESSION["MTR-P"],$_SESSION["MTR-N"]);
-//         $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+//         $connection = new mysqli($_SESSION["MTR-H"],$_SESSION["MTR-U"],$_SESSION["MTR-P"],$_SESSION["MTR-N"]);
+// //         $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
-        }
+//         // Check connection
+//         if ($connection->connect_error) {
+//             die("Connection failed: " . $connection->connect_error);
+//         }
         
-        $sql = "SELECT AOS FROM Meeter";
-        $result = $connection->query($sql);
+//         $sql = "SELECT AOS FROM Meeter";
+//         $result = $connection->query($sql);
         
-        if ($result->num_rows > 0) {
-            // output data of each row
-            while($row = $result->fetch_assoc()) {
-                $newAOS =  $row["AOS"];
-            }
-        } else {
-//             echo "0 results";
-        }
-        $connection->close();
+//         if ($result->num_rows > 0) {
+//             // output data of each row
+//             while($row = $result->fetch_assoc()) {
+//                 $newAOS =  $row["AOS"];
+//             }
+//         } else {
+// //             echo "0 results";
+//         }
+//         $connection->close();
+        $client = $_SESSION["MTR-CLIENT"];
+        $mapi = "http://rogueintel.org/mapi/public/index.php/api/client/getAOSConfig/$client";
+        
+        $data = file_get_contents($mapi);
+        $mapiArray = json_decode($data, true);
+//         print_r($mapiArray);
+//         echo "<br/>";
+        $mapi = $mapiArray[0];
+        $conf = $mapi['Setting'];
+//         mapi will have two values AOS
+//         echo "AOS: " . $mapi->Setting;
+
         unset($this->systemAOS);
         $this->systemAOS = array();
  
-        $ref = explode("|", $newAOS);
+        $ref = explode("|", $conf);
         for($il = 0; $il< sizeof($ref); $il++){
             $pair = explode(":", $ref[$il]);
             $this->systemAOS[$pair[0]] = $pair[1];
