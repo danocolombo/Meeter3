@@ -7,7 +7,7 @@ if (! isset($_SESSION["MTR-SESSION-ID"])) {
     exit();
 }
 require 'meeter.php';  //this is used for the config of meeter app for client
-// require 'mtrAOS.php';
+require 'mtrAOS.php';
 
 // need to get the configuration settings from the database
 $mtrConfig->getLatestConfig();   //meeeter.php
@@ -120,9 +120,13 @@ $mtrConfig->getLatestConfig();   //meeeter.php
     		</script>
 			<article>
 				<?php 
-				if ($_GET("Action") === "Edit"){
+				$Action = "New";
+				if(isset($_GET["ACTION"])){
+				    $Action = $_GET["Action"];
+				}
+				if ($Action === "Edit"){
 				    echo "<form id=\"personForm\" action=\"peepAction.php?Action=UpdatePeep\" method=\"post\">";
-				}elseif ($_GET("Action") === "New"){
+				}elseif ($Action === "New"){
 				    echo "<form id=\"personForm\" action=\"peepAction.php?Action=AddPeep\" method=\"post\">";
 				}
 				
