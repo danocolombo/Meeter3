@@ -16,7 +16,7 @@ if(!isset($_SESSION["MTR-SESSION-ID"])){
 	content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1" />
     <title>Meeter Web Application</title>
 
-
+<!--  
 <link rel="stylesheet" type="text/css" href="css/screen_styles.css" />
 <link rel="stylesheet" type="text/css"
 	href="css/screen_layout_large.css" />
@@ -26,11 +26,20 @@ if(!isset($_SESSION["MTR-SESSION-ID"])){
 <link rel="stylesheet" type="text/css"
 	media="only screen and (min-width:501px) and (max-width:800px)"
 	href="css/screen_layout_medium.css" />
+-->	
+	
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+	
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript"
 	src="js/farinspace/jquery.imgpreload.min.js"></script>
 <script type="text/javascript" src="js/design.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 <!--[if lt IE 9]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -39,7 +48,7 @@ if(!isset($_SESSION["MTR-SESSION-ID"])){
 <body>
 	<div class="page">
 		<header>
-			<div id="hero"></div>
+			<!--<div id="hero"></div>-->
 			<a class="logo" title="home" href="index.php"><span></span></a>
 		</header>
 		<div id="navBar"></div>
@@ -53,12 +62,11 @@ if(!isset($_SESSION["MTR-SESSION-ID"])){
 			?>
 			
 		</script>
-		<article>
-			<img src='images/cr_splash_590x250.jpg'></img><br />
+		<article><img class="img-responsive" src="images/cr_splash_590x250.jpg" alt="Chania" width="590" height="250"><br />
 			<br /> This web application is designed explicitly for your<br />
 			Celebrate Recovery ministry. For further information regarding<br />
 			this site or its contents please contact <a
-				href='mailto:dano@dcolombo.com'>Dano</a>
+				href='mailto:danocolombo@gmail.com'>Dano</a>
 				
 			<div style="float:right">
 				<?php echo $_SESSION["MTR-USER-LOGIN"] . ":" . $_SESSION["MTR-CLIENT"] . ":" . $_SESSION["MTR-ADMIN-FLAG"]; ?>
