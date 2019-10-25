@@ -60,20 +60,28 @@ if(!isset($_SESSION["MTR-SESSION-ID"])){
 			    echo "$( \"#navBar\" ).load( \"navbar.php\" );";
 			}
 			?>
-			
 		</script>
-		<article><img class="img-responsive" src="images/cr_splash_590x250.jpg" alt="Chania" width="590" height="250"><br />
-			<br /> This web application is designed explicitly for your<br />
-			Celebrate Recovery ministry. For further information regarding<br />
-			this site or its contents please contact <a
-				href='mailto:danocolombo@gmail.com'>Dano</a>
-				
+		<!-- <article>  -->
+		<div class="container-fluid">
+			<img class="img-responsive" src="images/cr_splash_590x250.jpg" alt="Chania" width="590" height="250"><br />
+			<div class="row">
+			<div class="col-sm-6 col-md-6 col-lg-6" style="padding-left:25px; padding-right:25px;">
+			This web application is designed explicitly for your Celebrate Recovery ministry. For further information regarding this site or its contents please contact <a href='mailto:danocolombo@gmail.com'>Dano</a>
+			</div>
+			</div>	
+			<div class="row">
+			<div class="col-sm-6 col-md-6 col-lg-6" style="padding-left:50px; padding-right:30px;">
 			<div style="float:right">
 				<?php echo $_SESSION["MTR-USER-LOGIN"] . ":" . $_SESSION["MTR-CLIENT"] . ":" . $_SESSION["MTR-ADMIN-FLAG"]; ?>
 			</div>
-		</article>
-		<div id="mtrFooter"></div>
-		<script>$("#mtrFooter").load("footer.php");</script>
+			</div>
+			</div>
+			<!--  </article>  -->
+		    <div id="mtrFooter">
+			<script>$("#mtrFooter").load("footer.php");</script>
+			</div>
+		</div> 
+		
 	</div>
 </body>
 </html>

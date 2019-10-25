@@ -17,20 +17,42 @@ $client = $_SESSION["MTR-CLIENT"];
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1" />
 		<title>Meeter Web Application</title>
+        <!--  
         <link rel="stylesheet" type="text/css" href="css/screen_styles.css" />
         <link rel="stylesheet" type="text/css" href="css/screen_layout_large.css" />
         <link rel="stylesheet" type="text/css" media="only screen and (min-width:50px) and (max-width:500px)"   href="css/screen_layout_small.css">
         <link rel="stylesheet" type="text/css" media="only screen and (min-width:501px) and (max-width:800px)"  href="css/screen_layout_medium.css">
+        -->
         <!--[if lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 
         <![endif]-->
+        <!--
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        -->
+        
+        
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	
+    <script
+    	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript"
+    	src="js/farinspace/jquery.imgpreload.min.js"></script>
+    <script type="text/javascript" src="js/design.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+            
+        
+        
+        
     </head>
     <body>
 		<div class="page">
 			<header>
 				<a class="logo" title="home" href="index.php"><span></span></a>
+				
 			</header>
 			<div id="navBar"></div>
 		<script>
