@@ -120,28 +120,26 @@ $client = $_SESSION["MTR-CLIENT"];
 //     $attributes = array('border' => '1', 'id' => 'trainingdata', 'align' => 'center', 'text-align' => 'center');
     
     /* add a link to enter a new meeting record - IF USER IS ADMIN*/
+    //============================================
+    // put option buttons on right
+    //============================================
+    echo "<div class='container'><p class='text-right'>";
     if($_SESSION["MTR-ADMIN-FLAG"] == "1"){
-        echo "<div style='text-align:right; padding-right: 20px;'><a href='mtgFormNew.php'>NEW ENTRY</a><br/>";
-    }else{
-        echo "<div style='text-align:right; padding-right: 20px;'><br/>";
+        echo "<a href='mtgFormNew.php'><button type='button' class='btn btn-link btn-xs'>NEW MEETING</button></a><br/>";
     }
+
     /* add link to old or new meetings */
     if (isset($_GET["PAST"])){
-        echo "<a href='meetings.php'>mtg plans</a>";
+        echo "<a href='meetings.php'><button type='button' class='btn btn-info btn-xs hidden-xs'>Meeting Plans</button></a>";
+        echo "<a href='meetings.php'><button type='button' class='btn btn-link btn-xs hidden-md hidden-lg'>Meeting Plans</button></a>";
     }else{
-        echo "<a href='meetings.php?PAST=1'>mtg history</a>";
+        echo "<a href='meetings.php?PAST=1'><button type='button' class='btn btn-link btn-xs'>Meeting History</button></a>";
     }
-    echo "</div>";
-//     //create the table object
-//     $table = new HTML_Table($attributes);
+    echo "</p></div>";
     
-//     //set the headers
-//     $table->setHeaderContents(0,0, "Date");
-//     $table->setHeaderContents(0,1, "#");
-//     $table->setHeaderContents(0,2, "Type");
-//     $table->setHeaderContents(0,3, "Title");
-//     $table->setHeaderContents(0,4, "Leader");
-//     $table->setHeaderContents(0,5, "Worship");
+    //============================================
+    //============================================
+    /* add the link to old or new meetings on far right */
     
     if(isset($mtg)){
         //if we have any meetings, display them
@@ -174,9 +172,9 @@ $client = $_SESSION["MTR-CLIENT"];
      ***********************************************/
     ?>
 	</article>
-	<footer>
-		&copy; 2013-2019 Rogue Intelligence
-	</footer>
+	<div id="mtrFooter">
+		<script>$("#mtrFooter").load("footer.php");</script>
+	</div>
 </div>
 </body>
 </html>
