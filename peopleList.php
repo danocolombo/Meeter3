@@ -79,7 +79,7 @@ header("Pragma: no-cache");
 <meta name="viewport"
 	content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1" />
 <title>Meeter Web Application</title>
-<link rel="stylesheet" type="text/css" href="css/screen_styles.css" />
+<!--   <link rel="stylesheet" type="text/css" href="css/screen_styles.css" />
 <link rel="stylesheet" type="text/css"
 	href="css/screen_layout_large.css" />
 <link rel="stylesheet" type="text/css"
@@ -88,28 +88,42 @@ header("Pragma: no-cache");
 <link rel="stylesheet" type="text/css"
 	media="only screen and (min-width:501px) and (max-width:800px)"
 	href="css/screen_layout_medium.css">
-<!--[if lt IE 9]>
+[if lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+        <![endif]
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+-->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	
+    <script
+    	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript"
+    	src="js/farinspace/jquery.imgpreload.min.js"></script>
+    <script type="text/javascript" src="js/design.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+            
+
 </head>
 <body>
 	<div class="page">
 		<header>
-			<div id="hero"></div>
+			<!-- <div id="hero"></div> -->
 			<a class="logo" title="home" href="index.php"><span></span></a>
 		</header>
 		<div id="navBar">
 			<script>
-                        <?php
-                        if ($_SESSION["MTR-ADMIN-FLAG"] == "1") {
-                            echo "$( \"#navBar\" ).load( \"navbarA.php\" );";
-                        } else {
-                            echo "$( \"#navBar\" ).load( \"navbar.php\" );";
-                        }
-                        ?>
+                <?php
+                if ($_SESSION["MTR-ADMIN-FLAG"] == "1") {
+                    echo "$( \"#navBar\" ).load( \"navbarA.php\" );";
+                } else {
+                    echo "$( \"#navBar\" ).load( \"navbar.php\" );";
+                }
+                ?>
 
-                     </script>
+             </script>
 		</div>
 		<article>
 <?php 
@@ -145,7 +159,8 @@ switch ("$Action"){
  ***********************************************/
 ?>
 	</article>
-		<footer> &copy; 2013-2020 Rogue Intelligence </footer>
+	<div id="mtrFooter">
+		<script>$("#mtrFooter").load("footer.php");</script>
 	</div>
 	<script src="js/meeter.js"></script>
 </body>
@@ -170,16 +185,19 @@ function showPeopleList() {
         exit();
     }
     echo "<div style='text-align:right; padding-right: 20px;'><a href='people.php?Action=ShowAll'><img src='images/btnShowAll.gif'/></a></div>";
-    echo "<div style='padding-left: 70px;'><h2>People List</h2></div>";
-    echo "<div style='padding-left:20px;'>";
-    echo "<table>";
+    echo "<div><center><h1>People List</h1></center></div>";
+    
+    echo "<div class='container'>";
+    echo "<div class='row'>";
+    echo "<div class='col-xs-12'>";
+    echo "<table class='table table-striped table-sm'>";
     foreach($listArray as $person){
-        echo "<tr><td>";
+        echo "<tr><td width='15px' style='text-align=right';>";
         echo "<a href='people.php?Action=Edit&PID=" . $person["ID"] . "'><img src='images/btnEdit.gif'></img></a></td>";
-        echo "<td>&nbsp;" . $person["FName"] . " " . $person["LName"] . "</td></tr>";
+        echo "<td width='200px'>" . $person["FName"] . " " . $person["LName"] . "</td></tr>";
     }
     echo "</table>";
-    echo "</div>";
+    echo "</div></div></div>";
     
 //     while(list($ID, $FName, $LName) = $result->fetch_row()){
 //         echo "<tr><td>";
