@@ -79,116 +79,116 @@ if(isset($_GET["ACTION"])){
 <meta name="viewport"
 	content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1" />
 <title>Meeter Web Application</title>
-<link rel="stylesheet" type="text/css" href="css/screen_styles.css" />
-<link rel="stylesheet" type="text/css"
-	href="css/screen_layout_large.css" />
-<link rel="stylesheet" type="text/css"
-	media="only screen and (min-width:50px) and (max-width:500px)"
-	href="css/screen_layout_small.css">
-<link rel="stylesheet" type="text/css"
-	media="only screen and (min-width:501px) and (max-width:800px)"
-	href="css/screen_layout_medium.css">
-<!--[if lt IE 9]>
-        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	
+    <script
+    	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript"
+    	src="js/farinspace/jquery.imgpreload.min.js"></script>
+    <script type="text/javascript" src="js/design.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+       
+
+
 <script type="text/javascript">
-			function validateForm(){
-				var x = document.forms["peepForm"]["peepFName"].value;
-				if (x == ""){
-					alert("Name is required.");
-					var elem = document.getElementByID("FName");
-					elem.focus();
-					elem.select();
-					return false;
-				}else{
-					//now depending on the button value, we will take action.
-					var b = document.getElementById("submitButton").value;
-					if (b == "add"){
-						document.getElementById("peepForm").submit();
-						return true;
-					}else if(b == "update"){
-						document.getElementById("peepForm").submit();
-						return true;
-					}
-				}
+	function validateForm(){
+		var x = document.forms["peepForm"]["peepFName"].value;
+		if (x == ""){
+			alert("Name is required.");
+			var elem = document.getElementByID("FName");
+			elem.focus();
+			elem.select();
+			return false;
+		}else{
+			//now depending on the button value, we will take action.
+			var b = document.getElementById("submitButton").value;
+			if (b == "add"){
+				document.getElementById("peepForm").submit();
+				return true;
+			}else if(b == "update"){
+				document.getElementById("peepForm").submit();
+				return true;
 			}
-			function selectAllCommits(){
-				// this function enables the checkbox for all configured commit options for the current user
-				<?php 
-				//-----------------------------------------------------------------------
-				// we will build the javascript necessary to select all AOS checkboxes
-				//-----------------------------------------------------------------------
-				$ckCommits = new mConfig();
-				$ckCommits->loadConfigFromDB();
-				foreach($ckCommits->AOS as $key => $value){
-				    // if the value for the key is false or DisplayValue is NOSHOW, skip
-				    $parts = explode("#", $value);
-				    if ($parts[0] == "true"){
-				        if ($parts[1] != "NOSHOW"){
-				            $tmp = "cb_" . $key;
-				            echo "\t\t\t\t" . $tmp . ".checked = true;\n";
-				        }
-				    }
-				}
-				?>
-				return false;
-			}
-			function deselectAllCommits(){
-				// this function enables the checkbox for all configured commit options for the current user
-				<?php 
-				//-----------------------------------------------------------------------
-				// we will build the javascript necessary to select all AOS checkboxes
-				//-----------------------------------------------------------------------
-				$uckCommits = new mConfig();
-				$uckCommits->loadConfigFromDB();
-				foreach($uckCommits->AOS as $key => $value){
-				    // if the value for the key is false or DisplayValue is NOSHOW, skip
-				    $parts = explode("#", $value);
-				    if ($parts[0] == "true"){
-				        if ($parts[1] != "NOSHOW"){
-				            $tmp = "cb_" . $key;
-				            echo "\t\t\t\t" . $tmp . ".checked = false;\n";
-				        }
-				    }
-				}
-				?>
-				return false;
-			}
-			
-			function ExitPeopleForm(){
-				// lets go back to the people list
-				window.location.href='peopleList.php';
-						return true;
-			}
-			
-			function getUrlVars() {
-			    var vars = {};
-			    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-			        vars[key] = value;
-			    });
-			    return vars;
-			}
-        </script>
+		}
+	}
+	function selectAllCommits(){
+		// this function enables the checkbox for all configured commit options for the current user
+		<?php 
+		//-----------------------------------------------------------------------
+		// we will build the javascript necessary to select all AOS checkboxes
+		//-----------------------------------------------------------------------
+		$ckCommits = new mConfig();
+		$ckCommits->loadConfigFromDB();
+		foreach($ckCommits->AOS as $key => $value){
+		    // if the value for the key is false or DisplayValue is NOSHOW, skip
+		    $parts = explode("#", $value);
+		    if ($parts[0] == "true"){
+		        if ($parts[1] != "NOSHOW"){
+		            $tmp = "cb_" . $key;
+		            echo "\t\t\t\t" . $tmp . ".checked = true;\n";
+		        }
+		    }
+		}
+		?>
+		return false;
+	}
+	function deselectAllCommits(){
+		// this function enables the checkbox for all configured commit options for the current user
+		<?php 
+		//-----------------------------------------------------------------------
+		// we will build the javascript necessary to select all AOS checkboxes
+		//-----------------------------------------------------------------------
+		$uckCommits = new mConfig();
+		$uckCommits->loadConfigFromDB();
+		foreach($uckCommits->AOS as $key => $value){
+		    // if the value for the key is false or DisplayValue is NOSHOW, skip
+		    $parts = explode("#", $value);
+		    if ($parts[0] == "true"){
+		        if ($parts[1] != "NOSHOW"){
+		            $tmp = "cb_" . $key;
+		            echo "\t\t\t\t" . $tmp . ".checked = false;\n";
+		        }
+		    }
+		}
+		?>
+		return false;
+	}
+	
+	function ExitPeopleForm(){
+		// lets go back to the people list
+		window.location.href='peopleList.php';
+				return true;
+	}
+	
+	function getUrlVars() {
+	    var vars = {};
+	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	        vars[key] = value;
+	    });
+	    return vars;
+	}
+</script>
 </head>
 <body>
 	<div class="page">
 		<header>
-			<div id="hero"></div>
 			<a class="logo" title="home" href="index.php"><span></span></a>
 		</header>
-		<div id="navBar">
-			<script>
-                        <?php
-                        if ($_SESSION["MTR-ADMIN-FLAG"] == "1") {
-                            echo "$( \"#navBar\" ).load( \"navbarA.php\" );";
-                        } else {
-                            echo "$( \"#navBar\" ).load( \"navbar.php\" );";
-                        }
-                        ?>
-
-                     </script>
-		</div>
+		<div id="navBar"></div>
+		<script>
+		<?php 
+				if($_SESSION["MTR-ADMIN-FLAG"] == "1"){
+				    echo "$( \"#navBar\" ).load( \"navbarA.php\" );";
+				}else{
+				    echo "$( \"#navBar\" ).load( \"navbar.php\" );";
+				}
+				?>
+		</script>
 		<article>
 <?php 
     /**********************************
@@ -267,7 +267,9 @@ switch ("$Action"){
  ***********************************************/
 ?>
 	</article>
-		<footer> &copy; 2013-2020 Rogue Intelligence </footer>
+		<div id="mtrFooter">
+		<script>$("#mtrFooter").load("footer.php");</script>
+	</div>
 	</div>
 	<script src="js/meeter.js"></script>
 </body>
