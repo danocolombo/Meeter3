@@ -40,25 +40,26 @@ if(!isset($_SESSION["MTR-SESSION-ID"])){
     			$( "#navBar" ).load( "navbarA.php" );
     		</script>
 			<article>
+			<!-- 
 			<div class="container">
 				<div class="col-sm-2 col-md-2 col-lg-2" style="padding-left:25px; padding-right:25px;">
-              		<button type="button" class="btn btn-default" style="background-color:blue; color:white; padding:0 10 0 10; onclick="window.location.href='adminHosts.php'"">Hosts</button>
+              		<button type="button" class="btn btn-default" style="background-color:blue; color:white; padding:0 10 0 10;" onclick="window.location.href='adminHosts.php">Hosts</button>
           		</div>
           		<div class="col-sm-4 col-md-4 col-lg-4" style="padding-left:25px; padding-right:25px;">
-              		<button type="button" class="btn btn-default" style="background-color:blue; color:white; padding:0 10 0 10;" onclick="window.location.href='adminMeeter.php'">Configuration</button> 
+              		<button type="button" class="btn btn-default" style="background-color:blue; color:white; padding:0 10 0 10;" onclick="window.location.href='adminMeeter.php">Configuration</button> 
           		</div> 
             </div>
+			-->
+			 
 			
-			<!--  
-			
-			<div class="col-sm-6 col-md-6 col-lg-6" style="padding-left:25px; padding-right:25px;">
+			<div class="col-sm-2 col-md-2 col-lg-2" style="padding-left:25px; padding-right:25px;">
 			<button style="font-family:tahoma; font-size:12pt; color:white; background:green; padding: 5px 15px 5px 15px; border-radius:10px;background-image: linear-gradient(to bottom right, #006600, #33cc33);" type="button" onclick="window.location.href='adminHosts.php'">Hosts</button>
 		    </div>
-		    <div class="col-sm-6 col-md-6 col-lg-6" style="padding-left:25px; padding-right:25px;">
+		    <div class="col-sm-4 col-md-4 col-lg-4" style="padding-left:25px; padding-right:25px;">
 		    <button style="font-family:tahoma; font-size:12pt; color:white; background:red; padding: 5px 15px 5px 15px; border-radius:10px;background-image: linear-gradient(to bottom right, #cc0000, #ff3300);" type="button" onclick="window.location.href='adminMeeter.php'">Configuration</button>
 			
 			</div>
-			-->
+			
 			<br/><br/>
 			</article>
 			<div id="mtrFooter">

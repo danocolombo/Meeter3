@@ -4,31 +4,26 @@
 $code = $_GET['code'];
 
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
-
-<script>
-	var CID = "<?php echo $code ?>";
-    var data = { UserPoolId : 'us-east-1_R5oqHdFWB',
-        ClientId : "<?php echo $code ?>"
-    };
-    var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
-    var cognitoUser = userPool.getCurrentUser();
+    <title>AWS SDK for JavaScript - Sample Application</title>
     
-    if (cognitoUser != null) {
-        cognitoUser.getSession(function(err, session) {
-            if (err) {
-                alert(err);
-                return;
-            }
-            console.log('session validity: ' + session.isValid());
-        });
-    }
-</script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
 </head>
 <body>
-<h2>chkInfo - here we go!!!</h2>
+	<h2>chkInfo - here we go!!!</h2>
+    <input type="file" id="file-chooser" />
+    <button id="upload-button" style="display:none">Upload to S3</button>
+
+	<script type="text/javascript">
+//     	var myCredentials = new AWS.CognitoIdentityCredentials({IdentityPoolId:'IDENTITY_POOL_ID'});
+        var myConfig = new AWS.Config({
+          credentials: myCredentials, region: 'us-east-1'
+        });
+
+        
+    </script>
 
 </body>
 </html>

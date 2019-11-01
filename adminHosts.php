@@ -1,6 +1,11 @@
 <?php 
-session_start();
-require_once('authenticate.php'); /* this is used for security purposes */
+if(!isset($_SESSION)){
+    session_start();
+}
+if(!isset($_SESSION["MTR-SESSION-ID"])){
+    header('Location: login.php');
+    exit();
+}
 require 'meeter.php';
 ?>
 <!DOCTYPE HTML>
@@ -9,18 +14,22 @@ require 'meeter.php';
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1" />
 		<title>Meeter Web Application</title>
-		<link rel="stylesheet" type="text/css" href="css/jqbase/jquery-ui.theme.css" />
-		<link rel="stylesheet" type="text/css" href="css/screen_styles.css" />
-		<link rel="stylesheet" type="text/css" href="css/screen_layout_large.css" />
-		<link rel="stylesheet" type="text/css" media="only screen and (min-width:50px) and (max-width:500px)"   href="css/screen_layout_small.css" />
-		<link rel="stylesheet" type="text/css" media="only screen and (min-width:501px) and (max-width:800px)"  href="css/screen_layout_medium.css" />
-		
+		<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+          	
+        <script
+        	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript"
+        	src="js/farinspace/jquery.imgpreload.min.js"></script>
+        <script type="text/javascript" src="js/design.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+            
+        
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		
-		<!--[if lt IE 9]>
-			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
 		<script>
 			function addHost(){
 				var PID = $("#candidates").val();
@@ -38,13 +47,19 @@ alert(dest);
 	<body>
 		<div class="page">
 			<header>
-				<div id="hero"></div>
-				<a class="logo" title="Host Definitions" href="index.php"></a>
+				<a class="logo" title="home" href="index.php"><span></span></a>
+				
 			</header>
 			<div id="navBar"></div>
-    		<script>
-    			$( "#navBar" ).load( "navbar.php" );
-    		</script>
+		<script>
+		<?php 
+				if($_SESSION["MTR-ADMIN-FLAG"] == "1"){
+				    echo "$( \"#navBar\" ).load( \"navbarA.php\" );";
+				}else{
+				    echo "$( \"#navBar\" ).load( \"navbar.php\" );";
+				}
+				?>
+		</script>
 			<article>
 			
 			<div>This administration setting is to identify who can be a host of a meeting.<br/>
